@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox id="signIn" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+  <children>
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="396.0" prefWidth="640.0" VBox.vgrow="ALWAYS">
+      <children>
+            <AnchorPane id="anchorPane" layoutX="251.0" layoutY="324.0" opacity="0.8" prefHeight="53.0" prefWidth="359.0" stylesheets="@css.css" />
+            <AnchorPane id="anchorPane" layoutX="251.0" layoutY="128.0" opacity="0.8" prefHeight="165.0" prefWidth="368.0" stylesheets="@css.css">
+               <children>
+                  <Button id="btnLogin" defaultButton="true" layoutX="290.0" layoutY="129.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="64.0" text="Login" textFill="#53635c">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <Label id="lblUsernameError" layoutX="109.0" layoutY="14.0" prefHeight="25.0" prefWidth="224.0" textFill="RED">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label id="lblPasswordError" layoutX="144.0" layoutY="91.0" prefHeight="25.0" prefWidth="224.0" textFill="RED">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="17.0" layoutY="72.0" prefHeight="25.0" prefWidth="106.0" text="Password:" textFill="#53635c">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <PasswordField id="txtPassword" layoutX="17.0" layoutY="99.0" prefHeight="25.0" prefWidth="154.0" />
+                  <Label layoutX="17.0" layoutY="5.0" prefHeight="38.0" prefWidth="106.0" text="Username:" textFill="#53635c">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField id="txtUsername" layoutX="17.0" layoutY="39.0" prefHeight="27.0" prefWidth="154.0" />
+               </children>
+            </AnchorPane>
+            <ImageView id="imgCerebro" fitHeight="425.0" fitWidth="191.0" layoutY="-3.0" pickOnBounds="true" preserveRatio="true" smooth="false">
+               <image>
+                  <Image url="@cerebro.jpg" />
+               </image>
+            </ImageView>
+            <Label layoutX="327.0" layoutY="14.0" prefHeight="60.0" prefWidth="239.0" stylesheets="@css.css" text="Sign In" textFill="#93ab9b">
+               <font>
+                  <Font size="53.0" />
+               </font>
+            </Label>
+             <Label layoutX="267.0" layoutY="331.0" prefHeight="38.0" prefWidth="338.0" stylesheets="@css.css" text="If you don´t have an account register" textFill="#53635c">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+            <Hyperlink id="hlkHere" layoutX="541.0" layoutY="333.0" text="here." textFill="#253ba8" visited="true">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Hyperlink>
+      </children>
+    </AnchorPane>
+      <AnchorPane id="anchorPane" opacity="0.8" prefHeight="174.0" prefWidth="359.0" stylesheets="@css.css" />
+  </children>
+</VBox>
