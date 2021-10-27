@@ -7,9 +7,13 @@ package view;
 
 import exceptions.EmptyFieldsException;
 import exceptions.FieldTooLongException;
+import exceptions.FullNameException;
+import static java.awt.Color.red;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.application.Application;
 import javafx.beans.InvalidationListener;
 import javafx.beans.value.ObservableValue;
@@ -37,6 +41,8 @@ public class SignUpController extends Application {
     
     private Stage stage;
     //Getters and Setters
+    @FXML
+    private Label lblRepeatPasswordError;
     
     /**
      * @return the stage
@@ -134,10 +140,24 @@ public class SignUpController extends Application {
         getStage().setResizable(false);
 
         getStage().setOnShowing(this::handleWindowShowing);
-        txtFullName.textProperty().addListener(this::textChanged);
-
+        txtFullName.textProperty().addListener(this::fullNameTextChanged);
+        txtUsername.textProperty().addListener(this::usernameTextChanged);
+        txtMail.textProperty().addListener(this::mailTextChanged);
+        txtPassword.textProperty().addListener(this::passwordTextChanged);
+        txtRepeatPassword.textProperty().addListener(this::repeatPasswordTextChanged);
+        btnBack.setOnAction(this::handleButton);
+        
         getStage().show();
     
+    }
+    
+    private void handleButton(ActionEvent event){
+        try {
+            getStage().close();
+        } catch (Exception ex) {
+            lblFullNameError.setText(ex.getMessage());
+            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void handleWindowShowing(WindowEvent event){
@@ -145,15 +165,65 @@ public class SignUpController extends Application {
         
     }
     
-    private void textChanged(ObservableValue observable, Object oldValue, Object newValue){
+    private void fullNameTextChanged(ObservableValue observable, Object oldValue, Object newValue){
         
         try {
-            check255(txtFullName.getText(),lblFullNameError);
+            check255(txtFullName.getText(), lblFullNameError);
+            checkWhiteSpace(txtFullName.getText(), lblFullNameError);
         } catch (FieldTooLongException ex) {
-            lblFullNameError.setText(ex.getMessage());
-            logger.info(ex.getMessage());
-            logger.warning(ex.getMessage());
+            errorLabel(lblFullNameError, ex);
+            
+        } catch (FullNameException ex) {
+            errorLabel(lblFullNameError, ex);
         }
+    }
+   
+    private void usernameTextChanged(ObservableValue observable, Object oldValue, Object newValue){
+        
+        try {
+            check255(txtUsername.getText(), lblUsernameError);
+        } catch (FieldTooLongException ex) {
+            errorLabel(lblUsernameError, ex);
+        }
+    }
+    
+    private void mailTextChanged(ObservableValue observable, Object oldValue, Object newValue){
+        
+        try {
+            check255(txtMail.getText(), lblMailError);
+        } catch (FieldTooLongException ex) {
+            errorLabel(lblMailError, ex);
+            
+        }
+    }
+    
+    private void passwordTextChanged(ObservableValue observable, Object oldValue, Object newValue){
+        
+        try {
+            check255(txtPassword.getText(), lblPasswordError);
+        } catch (FieldTooLongException ex) {
+            errorLabel(lblPasswordError, ex);
+            
+        }
+    }
+    
+    private void repeatPasswordTextChanged(ObservableValue observable, Object oldValue, Object newValue){
+        
+        try {
+            check255(txtRepeatPassword.getText(), lblRepeatPasswordError);
+        } catch (FieldTooLongException ex) {
+            errorLabel(lblRepeatPasswordError, ex);
+            
+        }
+    }
+    
+    
+    
+     private void errorLabel(Label lbl, Exception ex){
+        lbl.setText(ex.getMessage());
+        lbl.setStyle("-fx-text-fill: red; -fx-font-size: 13px");
+        logger.info(ex.getMessage());
+        logger.warning(ex.getMessage());
     }
 
     /**
@@ -166,11 +236,19 @@ public class SignUpController extends Application {
     }
 
 
-    private void check255(String text, Label lblError) throws FieldTooLongException{
-        if(text.length() > 5){
-            throw new FieldTooLongException();
-           
+    private void check255(String text, Label lbl) throws FieldTooLongException{
+        if(text.length() > 255){
+            throw new FieldTooLongException();  
+        }else{
+            lbl.setText("");
         }
+    }
+
+    private void checkWhiteSpace(String text, Label lblError) throws FullNameException{
+        if(!text.trim().contains(" ")){
+            throw new FullNameException();
+        }
+
     }
 
    

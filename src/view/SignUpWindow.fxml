@@ -11,58 +11,59 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.SignUpController">
+<VBox prefHeight="480.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.SignUpController">
     <children>
         <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
             <children>
-                <ImageView fx:id="imgCerebro" fitHeight="425.0" fitWidth="191.0" layoutY="-3.0" pickOnBounds="true" preserveRatio="true" smooth="false">
+                <ImageView fx:id="imgCerebro" fitHeight="480.0" fitWidth="191.0" layoutY="-3.0" pickOnBounds="true" preserveRatio="true" smooth="false">
                     <image>
                         <Image url="@cerebro.jpg" />
                     </image>
                 </ImageView>
-                <AnchorPane fx:id="anchorPane" layoutX="241.0" layoutY="84.0" opacity="0.8" prefHeight="290.0" prefWidth="369.0" stylesheets="@css.css">
+                <AnchorPane fx:id="anchorPane" layoutX="240.0" layoutY="80.0" opacity="0.8" prefHeight="337.0" prefWidth="482.0" stylesheets="@css.css">
                     <children>
-                        <PasswordField fx:id="txtRepeatPassword" layoutX="185.0" layoutY="189.0" prefHeight="25.0" prefWidth="154.0" promptText="Insert the password again" />
+                        <PasswordField fx:id="txtRepeatPassword" layoutX="7.0" layoutY="243.0" prefHeight="25.0" prefWidth="346.0" promptText="Insert the password again" />
                         <TextField fx:id="txtFullName" layoutX="7.0" layoutY="27.0" prefHeight="27.0" prefWidth="346.0" promptText="Insert your full name here" />
                         <Label layoutX="7.0" layoutY="54.0" prefHeight="27.0" prefWidth="106.0" text="Username:" textFill="#53635c">
                             <font>
                                 <Font size="18.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="txtUsername" layoutX="7.0" layoutY="81.0" prefHeight="27.0" prefWidth="154.0" promptText="Insert your username here" />
+                        <TextField fx:id="txtUsername" layoutX="7.0" layoutY="81.0" prefHeight="27.0" prefWidth="346.0" promptText="Insert your username here" />
                         <Label layoutX="7.0" layoutY="108.0" prefHeight="27.0" prefWidth="106.0" text="Mail:" textFill="#53635c">
                             <font>
                                 <Font size="18.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="txtMail" layoutX="7.0" layoutY="135.0" prefHeight="27.0" prefWidth="154.0" promptText="Insert your mail here" />
+                        <TextField fx:id="txtMail" layoutX="7.0" layoutY="135.0" prefHeight="27.0" prefWidth="346.0" promptText="Insert your mail here" />
                         <Label layoutX="7.0" layoutY="162.0" prefHeight="27.0" prefWidth="106.0" text="Password:" textFill="#53635c">
                             <font>
                                 <Font size="18.0" />
                             </font>
                         </Label>
-                        <PasswordField fx:id="txtPassword" layoutX="7.0" layoutY="189.0" prefHeight="25.0" prefWidth="154.0" promptText="Insert the password" />
-                        <Label layoutX="185.0" layoutY="162.0" prefHeight="27.0" prefWidth="173.0" text="Repeat password:" textFill="#53635c">
+                        <PasswordField fx:id="txtPassword" layoutX="7.0" layoutY="189.0" prefHeight="25.0" prefWidth="346.0" promptText="Insert the password" />
+                        <Label layoutX="4.0" layoutY="216.0" prefHeight="27.0" prefWidth="173.0" text="Repeat password:" textFill="#53635c">
                             <font>
                                 <Font size="18.0" />
                             </font>
                         </Label>
-                        <Button fx:id="btnRegister" defaultButton="true" layoutX="291.0" layoutY="254.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="64.0" text="Register" textFill="#53635c">
+                        <Button fx:id="btnRegister" defaultButton="true" layoutX="382.0" layoutY="298.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="90.0" text="Register" textFill="#53635c">
                             <cursor>
                                 <Cursor fx:constant="HAND" />
                             </cursor>
                         </Button>
-                        <Button fx:id="btnBack" layoutX="216.0" layoutY="254.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="64.0" text="Back" textFill="#53635c">
+                        <Button fx:id="btnBack" layoutX="275.0" layoutY="298.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="90.0" text="Back" textFill="#53635c">
                             <cursor>
                                 <Cursor fx:constant="HAND" />
                             </cursor>
                         </Button>
                   <Label fx:id="lblUsernameError" layoutX="98.0" layoutY="58.0" prefHeight="18.0" prefWidth="254.0" />
-                  <Label fx:id="lblMailError" layoutX="12.0" layoutY="112.0" prefHeight="18.0" prefWidth="254.0" />
-                  <Label fx:id="lblPasswordError" layoutX="44.0" layoutY="218.0" prefHeight="18.0" prefWidth="254.0" />
+                  <Label fx:id="lblMailError" layoutX="53.0" layoutY="112.0" prefHeight="18.0" prefWidth="254.0" />
+                  <Label fx:id="lblPasswordError" layoutX="91.0" layoutY="166.0" prefHeight="18.0" prefWidth="254.0" />
+                  <Label fx:id="lblRepeatPasswordError" layoutX="154.0" layoutY="220.0" prefHeight="18.0" prefWidth="254.0" />
                     </children>
                 </AnchorPane>
-                <Label layoutX="295.0" prefHeight="60.0" prefWidth="239.0" text="Sign Up" textAlignment="CENTER" textFill="#93ab9b">
+                <Label layoutX="362.0" prefHeight="60.0" prefWidth="239.0" text="Sign Up" textAlignment="CENTER" textFill="#93ab9b">
                     <font>
                         <Font size="53.0" />
                     </font>
