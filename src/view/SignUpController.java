@@ -33,10 +33,11 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 /**
+ * This is the controller of the Sign Up window
  *
- * @author 2dam
+ * @author Alain Lozano, Ilia Consuegra
  */
-public class SignUpController extends Application {
+public class SignUpController {
 
     private Stage stage;
     //Getters and Setters
@@ -87,29 +88,6 @@ public class SignUpController extends Application {
     private Label lblMailError;
     @FXML
     private Label lblPasswordError;
-
-    /**
-     *
-     * @param stage
-     */
-    @Override
-    public void start(Stage stage) {
-        try {
-            this.setStage(stage);
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignUpWindow.fxml"));
-
-            Parent root = (Parent) loader.load();
-
-            SignUpController controller = ((SignUpController) loader.getController());
-
-            controller.setStage(stage);
-            controller.initStage(root);
-
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 
     /*
     The fields Full name (txtFullName), Username (txtUsername), Mail (txtMail), Password (txtPassword) and Repeat password (txtRepeatPassword) are enabled.
@@ -292,18 +270,18 @@ public class SignUpController extends Application {
     If it exists (ExistUserException()), an alert (alertExistUser) is displayed and when it is closed, all the fields are deleted.
     If it does not exist, a user is added to the database through the signUp() method, with the data entered and the signIn window is open sending the username and the password.
      */
-
     /**
      *
      * @param event
      */
     private void handleButtonRegister(ActionEvent event) {
-        if(checkEmptyFields()){
+        if (checkEmptyFields()) {
             try {
                 checkPasswords();
                 txtPassword.setText("");
                 txtRepeatPassword.setText("");
-                txtPassword.requestFocus();    
+                txtPassword.requestFocus();
+
             } catch (RepeatPasswordException ex) {
                 errorLabel(lblPasswordError, ex);
                 errorLabel(lblRepeatPasswordError, ex);
@@ -313,6 +291,7 @@ public class SignUpController extends Application {
         /*
         try{
          addUser();
+        
         }catch(ExistUserException ex){
             Alert alert = new Alert(ERROR);
             alert.setTitle("Error Message");
@@ -321,8 +300,7 @@ public class SignUpController extends Application {
             alert.showAndWait();
             logger.warning(ex.getMessage());
         }
-        */
-        
+         */
     }
 
     private void handleButtonBack(ActionEvent event) {
@@ -334,17 +312,10 @@ public class SignUpController extends Application {
         }
     }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        launch(args);
-    }
-
     /*
     Check that the Full Name field (txtFullName), Username field (txtUsername), Mail field (txtMail), Password field (txtPassword) and Repeat Password field (txtRepeatPassword) fields are not empty.
     If they are empty (EmptyFieldException()), an error label is shown for each field (lblFullNameError, lblUsernameError, lblMailError, lblPasswordError, lblRepeatPasswordError).
-    */
+     */
     private boolean checkEmptyFields() {
         boolean check = true;
         if (txtRepeatPassword.getText().isEmpty()) {
@@ -355,7 +326,7 @@ public class SignUpController extends Application {
             } catch (EmptyFieldsException ex) {
                 errorLabel(lblRepeatPasswordError, ex);
                 logger.warning(ex.getMessage());
-            } 
+            }
         }
         if (txtPassword.getText().isEmpty()) {
             try {
@@ -399,23 +370,24 @@ public class SignUpController extends Application {
         }
         return check;
     }
+
     /*
     Validate that the password entered in the Repeat Password field (txtRepeatPassword) is the same as the one entered in the Password field (txtPassword).
     If it is not the same (RepeatPasswordException()), an error label (lblRepeatPasswordError) is shown and the two password fields are deleted.
-    */
-    
+     */
+
     /**
-     * 
-     * @throws RepeatPasswordException 
+     *
+     * @throws RepeatPasswordException
      */
     private void checkPasswords() throws RepeatPasswordException {
-        if(!txtPassword.getText().trim().equals(txtRepeatPassword.getText().trim())){
+        if (!txtPassword.getText().trim().equals(txtRepeatPassword.getText().trim())) {
             throw new RepeatPasswordException();
         }
     }
 
     private void addUser() {
-        
+
         User user = new User();
         user.setFullName(txtFullName.getText());
         user.setLogin(txtUsername.getText());

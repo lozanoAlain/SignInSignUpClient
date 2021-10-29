@@ -19,7 +19,7 @@
             <AnchorPane id="anchorPane" layoutX="251.0" layoutY="324.0" opacity="0.8" prefHeight="53.0" prefWidth="359.0" stylesheets="@css.css" />
             <AnchorPane id="anchorPane" layoutX="251.0" layoutY="128.0" opacity="0.8" prefHeight="165.0" prefWidth="368.0" stylesheets="@css.css">
                <children>
-                  <Button fx:id="btnLogin" defaultButton="true" layoutX="290.0" layoutY="129.0" mnemonicParsing="false" onAction="#btnLoginPressed" prefHeight="25.0" prefWidth="64.0" text="Login" textFill="#53635c">
+                  <Button fx:id="btnLogin" defaultButton="true" layoutX="290.0" layoutY="129.0" mnemonicParsing="false" onAction="#handleBtnLoginPressed" prefHeight="25.0" prefWidth="64.0" text="Login" textFill="#53635c">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>

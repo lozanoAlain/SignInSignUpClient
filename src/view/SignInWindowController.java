@@ -25,6 +25,8 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -58,17 +60,18 @@ public class SignInWindowController {
 
     private static final Logger logger = Logger.getLogger("package.class");
 
+    //Getters and Setters
     /**
-     * Gets stage.
+     * Gets the stage.
      *
-     * @return stage
+     * @return the stage
      */
     public Stage getStage() {
         return stage;
     }
 
     /**
-     * Sets stage.
+     * Sets the stage.
      *
      * @param stage
      */
@@ -88,14 +91,24 @@ public class SignInWindowController {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         Logger.getLogger(SignInWindowController.class.getName()).log(Level.INFO, "Initializing stage.");
+        //The window title
         stage.setTitle("Sign In Window");
+
         //The window (SignInWindow) is not resizable.
         stage.setResizable(false);
+
         //The username (txtUsername) field is focused.
         stage.setOnShowing(this::handleOnWindow);
+
         //The error labels (lblUsernameError and lblPasswordError) are not visible.
-        lblPasswordError.setDisable(true);
-        lblUsernameError.setDisable(true);
+        lblPasswordError.setVisible(false);
+        lblUsernameError.setVisible(false);
+        
+        //some tooltips to help the user
+        btnLogin.setTooltip(new Tooltip("Click to log in"));
+        hlkHere.setTooltip(new Tooltip("Click to go to the Sign up window and register"));
+
+        //Shows stage
         stage.show();
         Logger.getLogger(SignInWindowController.class.getName()).log(Level.INFO, "Showing stage");
     }
@@ -108,7 +121,7 @@ public class SignInWindowController {
      * @throws IOException
      */
     @FXML
-    public void btnLoginPressed(ActionEvent event) throws IOException {
+    public void handleBtnLoginPressed(ActionEvent event) throws IOException {
         //Check username and shows user errors
         checkIsNotEmpty(txtUsername, lblUsernameError);
         checkNoLonger255(txtUsername, lblUsernameError);
@@ -116,7 +129,7 @@ public class SignInWindowController {
         checkIsNotEmpty(txtPassword, lblPasswordError);
         checkNoLonger255(txtPassword, lblPasswordError);
         //Check that the user exist or not
-        checkUserExist(txtUsername, txtPassword);
+      //  checkUserExist(txtUsername, txtPassword);
     }
 
     /**
@@ -130,20 +143,14 @@ public class SignInWindowController {
         stage.close();
         //opens the Sign Up window
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignUpWindow.fxml"));
+
         Parent root = (Parent) loader.load();
-        /**
-         *
-         * SignUpWindowController
-         * signUpWindowController=(loader.getController());
-         * signUpWindowController.setStage(stage);
-         * stage.initModality(Modality.WINDOW_MODAL);
-         * signUpWindowController.initStage(root);
-         *
-         *
-         *
-         * comentado xq el controler de esa ventana no existe aún
-         *
-         */
+
+        SignUpController controller = ((SignUpController) loader.getController());
+
+        controller.setStage(stage);
+        controller.initStage(root);
+
     }
 
     /**
@@ -165,7 +172,13 @@ public class SignInWindowController {
         //The login button (btnLogin) is focused.
         stage.setOnShowing(this::handleOnWindowSignUp);
     }
-
+    
+    /**
+     * 
+     * @param text
+     * @param lblError 
+     * @exception FieldTooLongException
+     */
     private void checkNoLonger255(TextField text, Label lblError) {
         // If the field is longer than 255, an error label is shown.
         if (text.getLength() > 255) {
@@ -180,6 +193,12 @@ public class SignInWindowController {
         }
     }
 
+    /**
+     *
+     * @param text
+     * @param lblError
+     * @exception EmptyFieldsException
+     */
     private void checkIsNotEmpty(TextField text, Label lblError) {
         // If the fields are empty, an error label is shown.
         if (text.getText().trim().isEmpty()) {
@@ -196,52 +215,54 @@ public class SignInWindowController {
         }
     }
 
-    private void checkUserExist(TextField txtUsername, PasswordField txtPassword) {
-        if (!signin(txtUsername, txtPassword)) {
-            try {
-                if (!txtUsername.getText().isEmpty()) {
-                    //clears the fields
-                    txtUsername.clear();
-                    txtPassword.clear();
-                    //throws the exception
-                    throw new UserNotExistException();
-                }
-            } catch (UserNotExistException ex) {
-
-                //shows an alert
-                Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle("User does not exist");
-                alert.setHeaderText(ex.getMessage());
-                alert.setContentText("Ooops, there was an error! Try to write a valid username.");
-                alert.showAndWait();
-                logger.warning(ex.getMessage());
-                lblPasswordError.setDisable(true);
-                lblUsernameError.setDisable(true);
-            }
-        } else {
-            try {
-                stage.close();
-                //opens the Welcome window
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/WelcomeWindow.fxml"));
-                Parent root = (Parent) loader.load();
-                /**
-                 *
-                 * WelcomeWindowController
-                 * welcomeWindowController=(loader.getController());
-                 * welcomeWindowController.setStage(stage);
-                 * stage.initModality(Modality.WINDOW_MODAL);
-                 * welcomeWindowController.initStage(root);
-                 *
-                 *
-                 *
-                 * comentado xq el controler de esa ventana no existe aún
-                 *
-                 */
-            } catch (IOException ex) {
-                logger.warning(ex.getMessage());
-            }
-        }
+    /**
+     *
+     * @param txtUsername
+     * @param txtPassword
+     * @exception UserNotExistException
+     */
+    /*    private void checkUserExist(TextField txtUsername, PasswordField txtPassword) {
+    if (!signin(txtUsername, txtPassword)) {
+    try {
+    if (!txtUsername.getText().isEmpty()) {
+    //clears the fields
+    txtUsername.clear();
+    txtPassword.clear();
+    //throws the exception
+    throw new UserNotExistException();
     }
+    } catch (UserNotExistException ex) {
+    
+    //shows an alert
+    Alert alert = new Alert(AlertType.ERROR);
+    alert.setTitle("User does not exist");
+    alert.setHeaderText(ex.getMessage());
+    alert.setContentText("Ooops, there was an error! Try to write a valid username.");
+    alert.showAndWait();
+    logger.warning(ex.getMessage());
+    lblPasswordError.setDisable(true);
+    lblUsernameError.setDisable(true);
+    }
+    } else {
+    try {
+    stage.close();
+    //opens the Welcome window
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/WelcomeWindow.fxml"));
+    Parent root = (Parent) loader.load();
+    
+    WelcomeWindowController welcomeWindowController = (loader.getController());
+    welcomeWindowController.setStage(stage);
+    
+    //open as modal
+    stage.initModality(Modality.WINDOW_MODAL);
+    
+    welcomeWindowController.initStage(root);
+    
+    } catch (IOException ex) {
+    logger.warning(ex.getMessage());
+    }
+    }
+    }*/
 
     /**
      * Focus the username field.
@@ -263,25 +284,31 @@ public class SignInWindowController {
         btnLogin.isFocused();
     }
 
-    private boolean signin(TextField txtUsername, PasswordField txtPassword) {
-        User user = new User();
-        user.setLogin(txtUsername.getText());
-        user.setPassword(txtPassword.getText());
-        //llamar a la factoría de Signable para utilizar el metodo signIn(user);
-        //cambiar, is empty NO
-        if (!user.getPassword().isEmpty()) {
-            try {
-                lblPasswordError.setVisible(true);
-                throw new IncorrectPasswordException();
-
-            } catch (IncorrectPasswordException ex) {
-                logger.warning(ex.getMessage());
-                lblPasswordError.setText(ex.getMessage());
-                txtPassword.setText("");
-                txtUsername.setText("");
-            }
-        }
-        return false;
+    /**
+     *
+     * @param txtUsername
+     * @param txtPassword
+     * @return
+     * @exception IncorrectPasswordException
+     */
+    /*   private boolean signin(TextField txtUsername, PasswordField txtPassword) {
+    User user = new User();
+    user.setLogin(txtUsername.getText());
+    user.setPassword(txtPassword.getText());
+    //llamar a la factoría de Signable para utilizar el metodo signIn(user);
+    //cambiar, is empty NO
+    if (!user.getPassword().isEmpty()) {
+    try {
+    lblPasswordError.setVisible(true);
+    throw new IncorrectPasswordException();
+    
+    } catch (IncorrectPasswordException ex) {
+    logger.warning(ex.getMessage());
+    lblPasswordError.setText(ex.getMessage());
+    txtPassword.setText("");
+    txtUsername.setText("");
     }
-
+    }
+    return false;
+    }*/
 }

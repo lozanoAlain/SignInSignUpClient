@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.WelcomeWindowController">
     <children>
         <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="411.0" prefWidth="680.0" VBox.vgrow="ALWAYS">
             <children>
@@ -30,17 +30,17 @@
                         </Label>
                     </children>
                 </AnchorPane>
-                <Button id="btnExit" defaultButton="true" layoutX="547.0" layoutY="334.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="64.0" text="Exit" textFill="#53635c">
+                <Button fx:id="btnExit" defaultButton="true" onAction="#handleBtnExitPressed" layoutX="547.0" layoutY="334.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="64.0" text="Exit" textFill="#53635c">
                     <cursor>
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
-                <Label id="lblGreeting" layoutX="302.0" layoutY="22.0" prefHeight="60.0" prefWidth="239.0" text="Welcome" textFill="#93ab9b">
+                <Label fx:id="lblGreeting" layoutX="302.0" layoutY="22.0" prefHeight="60.0" prefWidth="239.0" text="Welcome" textFill="#93ab9b">
                     <font>
                         <Font size="53.0" />
                     </font>
                 </Label>
-            <Button id="btnLogOut" layoutX="477.0" layoutY="335.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="64.0" text="Log out" textFill="#53635c">
+            <Button fx:id="btnLogOut" layoutX="477.0" layoutY="335.0" onAction="#handleBtnLogOutPressed" mnemonicParsing="false" prefHeight="25.0" prefWidth="64.0" text="Log out" textFill="#53635c">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
