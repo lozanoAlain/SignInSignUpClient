@@ -1,10 +1,5 @@
 package tests;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
@@ -18,12 +13,17 @@ import org.testfx.matcher.base.WindowMatchers;
 import view.WelcomeWindowController;
 
 /**
- *
+ * This class tests the Welcome window
  * @author Matteo Fernández
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class WelcomeWindowTest extends ApplicationTest {
 
+    /**
+     * Starts the test with the Welcome window controller
+     * @param stage
+     * @throws Exception
+     */
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/WelcomeWindowController.fxml"));
