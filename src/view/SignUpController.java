@@ -5,7 +5,9 @@
  */
 package view;
 
+import dataModel.Signable;
 import dataModel.User;
+import exceptions.ConnectionErrorException;
 import exceptions.EmptyFieldsException;
 import exceptions.ExistUserException;
 import exceptions.FieldTooLongException;
@@ -31,6 +33,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import logic.SignableFactory;
 
 /**
  * This is the controller of the Sign Up window
@@ -50,6 +53,8 @@ public class SignUpController {
     public Stage getStage() {
         return stage;
     }
+    
+    private Signable signable;
 
     /**
      * @param stage the stage to set
@@ -116,6 +121,13 @@ public class SignUpController {
         btnBack.setOnAction(this::handleButtonBack);
         btnRegister.setOnAction(this::handleButtonRegister);
 
+        SignableFactory signableFactory = new SignableFactory();
+        try {
+            signable = signableFactory.getSignable();
+        } catch (Exception ex) {
+            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         getStage().show();
 
     }
@@ -281,11 +293,19 @@ public class SignUpController {
                 txtPassword.setText("");
                 txtRepeatPassword.setText("");
                 txtPassword.requestFocus();
+                User user = addUser();
+                signable.signUp(user);
 
             } catch (RepeatPasswordException ex) {
                 errorLabel(lblPasswordError, ex);
                 errorLabel(lblRepeatPasswordError, ex);
                 logger.warning(ex.getMessage());
+            }catch(ExistUserException ex){
+                logger.warning(ex.getMessage());
+            } catch (ConnectionErrorException ex) {
+                Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         /*
@@ -386,13 +406,14 @@ public class SignUpController {
         }
     }
 
-    private void addUser() {
+    private User addUser() {
 
         User user = new User();
         user.setFullName(txtFullName.getText());
         user.setLogin(txtUsername.getText());
         user.setEmail(txtMail.getText());
-        user.setPassword(txtPassword.getText());
+        user.setPassword(new String(txtPassword.getText()));
+        return user;
     }
 
 }
