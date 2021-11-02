@@ -61,6 +61,7 @@ public class SignInWindowController {
     private static final Logger logger = Logger.getLogger("package.class");
 
     //Getters and Setters
+    
     /**
      * Gets the stage.
      *
@@ -103,7 +104,7 @@ public class SignInWindowController {
         //The error labels (lblUsernameError and lblPasswordError) are not visible.
         lblPasswordError.setVisible(false);
         lblUsernameError.setVisible(false);
-        
+
         //some tooltips to help the user
         btnLogin.setTooltip(new Tooltip("Click to log in"));
         hlkHere.setTooltip(new Tooltip("Click to go to the Sign up window and register"));
@@ -129,7 +130,7 @@ public class SignInWindowController {
         checkIsNotEmpty(txtPassword, lblPasswordError);
         checkNoLonger255(txtPassword, lblPasswordError);
         //Check that the user exist or not
-      //  checkUserExist(txtUsername, txtPassword);
+        //  checkUserExist(txtUsername, txtPassword);
     }
 
     /**
@@ -140,7 +141,10 @@ public class SignInWindowController {
      */
     @FXML
     public void hlkHerePressed(ActionEvent event) throws IOException {
+        Logger.getLogger(SignInWindowController.class.getName()).log(Level.INFO, "Closing Sign in stage.");
         stage.close();
+
+        Logger.getLogger(SignInWindowController.class.getName()).log(Level.INFO, "Initializing Sign Up stage.");
         //opens the Sign Up window
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignUpWindow.fxml"));
 
@@ -149,8 +153,9 @@ public class SignInWindowController {
         SignUpController controller = ((SignUpController) loader.getController());
 
         controller.setStage(stage);
+        //put it as modal
+        stage.initModality(Modality.WINDOW_MODAL);
         controller.initStage(root);
-
     }
 
     /**
@@ -172,11 +177,11 @@ public class SignInWindowController {
         //The login button (btnLogin) is focused.
         stage.setOnShowing(this::handleOnWindowSignUp);
     }
-    
+
     /**
-     * 
+     *
      * @param text
-     * @param lblError 
+     * @param lblError
      * @exception FieldTooLongException
      */
     private void checkNoLonger255(TextField text, Label lblError) {
@@ -194,7 +199,7 @@ public class SignInWindowController {
     }
 
     /**
-     *
+     * Check that the field is not empty
      * @param text
      * @param lblError
      * @exception EmptyFieldsException
@@ -263,7 +268,6 @@ public class SignInWindowController {
     }
     }
     }*/
-
     /**
      * Focus the username field.
      *
@@ -291,7 +295,7 @@ public class SignInWindowController {
      * @return
      * @exception IncorrectPasswordException
      */
-    /*   private boolean signin(TextField txtUsername, PasswordField txtPassword) {
+    /* private boolean signin(TextField txtUsername, PasswordField txtPassword) {
     User user = new User();
     user.setLogin(txtUsername.getText());
     user.setPassword(txtPassword.getText());
@@ -311,4 +315,4 @@ public class SignInWindowController {
     }
     return false;
     }*/
-}
+     }
