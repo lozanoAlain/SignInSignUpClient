@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -139,8 +140,7 @@ public class SignInWindowController {
      * @throws IOException
      */
     @FXML
-    public void hlkHerePressed(ActionEvent event) throws IOException {
-        stage.close();
+    private void hlkHerePressed(ActionEvent event) throws IOException {
         //opens the Sign Up window
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignUpWindow.fxml"));
 
@@ -148,7 +148,10 @@ public class SignInWindowController {
 
         SignUpController controller = ((SignUpController) loader.getController());
 
-        controller.setStage(stage);
+        controller.setStage(stage);/*
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(
+                ((Node) event.getSource()).getScene().getWindow());*/
         controller.initStage(root);
 
     }

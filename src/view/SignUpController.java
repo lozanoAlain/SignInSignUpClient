@@ -31,6 +31,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import logic.SignableFactory;
@@ -113,7 +114,7 @@ public class SignUpController {
         getStage().setResizable(false);
 
         stage.setOnShowing(this::handleWindowShowing);
-        txtFullName.textProperty().addListener(this::fullNameTextChanged);
+        txtFullName.focusedProperty().addListener(this::fullNameFocusChanged);
         txtUsername.textProperty().addListener(this::usernameTextChanged);
         txtMail.textProperty().addListener(this::mailTextChanged);
         txtPassword.textProperty().addListener(this::passwordTextChanged);
@@ -155,16 +156,21 @@ public class SignUpController {
      * @param oldValue
      * @param newValue
      */
-    private void fullNameTextChanged(ObservableValue observable, String oldValue, String newValue) {
-
-        try {
-            check255(txtFullName.getText(), lblFullNameError);
-            checkWhiteSpace(txtFullName.getText(), lblFullNameError);
-        } catch (FieldTooLongException ex) {
-            errorLabel(lblFullNameError, ex);
-
-        } catch (FullNameException ex) {
-            errorLabel(lblFullNameError, ex);
+    private void fullNameFocusChanged(ObservableValue observable, Boolean oldValue, Boolean newValue) {
+        
+        if(newValue){
+            logger.info("onFocus");
+            
+        }else if(oldValue){
+            try {
+                logger.info("onBlur");
+                check255(txtFullName.getText(), lblFullNameError);
+                checkWhiteSpace(txtFullName.getText(), lblFullNameError);
+            } catch (FieldTooLongException ex) {
+                errorLabel(lblFullNameError, ex);
+            } catch (FullNameException ex) {
+                errorLabel(lblFullNameError, ex);
+            }
         }
     }
 
@@ -223,7 +229,7 @@ public class SignUpController {
     private void passwordTextChanged(ObservableValue observable, String oldValue, String newValue) {
 
         try {
-            check255(txtPassword.getText(), lblPasswordError);
+            check255(new String(txtPassword.getText()), lblPasswordError);
         } catch (FieldTooLongException ex) {
             errorLabel(lblPasswordError, ex);
 
@@ -244,7 +250,7 @@ public class SignUpController {
     private void repeatPasswordTextChanged(ObservableValue observable, String oldValue, String newValue) {
 
         try {
-            check255(txtRepeatPassword.getText(), lblRepeatPasswordError);
+            check255(new String(txtRepeatPassword.getText()), lblRepeatPasswordError);
         } catch (FieldTooLongException ex) {
             errorLabel(lblRepeatPasswordError, ex);
 
@@ -287,25 +293,25 @@ public class SignUpController {
      * @param event
      */
     private void handleButtonRegister(ActionEvent event) {
-        if (checkEmptyFields()) {
+        if (!checkEmptyFields()) {
             try {
                 checkPasswords();
-                txtPassword.setText("");
-                txtRepeatPassword.setText("");
-                txtPassword.requestFocus();
                 User user = addUser();
                 signable.signUp(user);
 
             } catch (RepeatPasswordException ex) {
                 errorLabel(lblPasswordError, ex);
                 errorLabel(lblRepeatPasswordError, ex);
+                txtPassword.setText("");
+                txtRepeatPassword.setText("");
+                txtPassword.requestFocus();
                 logger.warning(ex.getMessage());
             }catch(ExistUserException ex){
                 logger.warning(ex.getMessage());
             } catch (ConnectionErrorException ex) {
-                Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, ex);
+                logger.warning(ex.getMessage());
             } catch (Exception ex) {
-                Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, ex);
+                logger.warning(ex.getMessage());
             }
         }
         /*
@@ -326,6 +332,13 @@ public class SignUpController {
     private void handleButtonBack(ActionEvent event) {
         try {
             getStage().close();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignInWindow.fxml"));
+            Parent root = (Parent) loader.load();
+            
+            SignInWindowController controller = (SignInWindowController) loader.getController();
+            controller.setStage(stage);
+            controller.initStage(root);
+            
         } catch (Exception ex) {
             lblFullNameError.setText(ex.getMessage());
             logger.warning(ex.getMessage());
@@ -337,10 +350,10 @@ public class SignUpController {
     If they are empty (EmptyFieldException()), an error label is shown for each field (lblFullNameError, lblUsernameError, lblMailError, lblPasswordError, lblRepeatPasswordError).
      */
     private boolean checkEmptyFields() {
-        boolean check = true;
-        if (txtRepeatPassword.getText().isEmpty()) {
+        boolean check = false;
+        if (new String(txtRepeatPassword.getText()).isEmpty()) {
             try {
-                check = false;
+                check = true;
                 txtRepeatPassword.requestFocus();
                 throw new EmptyFieldsException();
             } catch (EmptyFieldsException ex) {
@@ -348,9 +361,9 @@ public class SignUpController {
                 logger.warning(ex.getMessage());
             }
         }
-        if (txtPassword.getText().isEmpty()) {
+        if (new String(txtPassword.getText()).isEmpty()) {
             try {
-                check = false;
+                check = true;
                 txtPassword.requestFocus();
                 throw new EmptyFieldsException();
             } catch (EmptyFieldsException ex) {
@@ -360,7 +373,7 @@ public class SignUpController {
         }
         if (txtMail.getText().isEmpty()) {
             try {
-                check = false;
+                check = true;
                 txtMail.requestFocus();
                 throw new EmptyFieldsException();
             } catch (EmptyFieldsException ex) {
@@ -370,7 +383,7 @@ public class SignUpController {
         }
         if (txtUsername.getText().isEmpty()) {
             try {
-                check = false;
+                check = true;
                 txtUsername.requestFocus();
                 throw new EmptyFieldsException();
             } catch (EmptyFieldsException ex) {
@@ -380,7 +393,7 @@ public class SignUpController {
         }
         if (txtFullName.getText().isEmpty()) {
             try {
-                check = false;
+                check = true;
                 txtFullName.requestFocus();
                 throw new EmptyFieldsException();
             } catch (EmptyFieldsException ex) {
@@ -401,7 +414,7 @@ public class SignUpController {
      * @throws RepeatPasswordException
      */
     private void checkPasswords() throws RepeatPasswordException {
-        if (!txtPassword.getText().trim().equals(txtRepeatPassword.getText().trim())) {
+        if (!new String(txtPassword.getText()).trim().equals(new String(txtRepeatPassword.getText()).trim())) {
             throw new RepeatPasswordException();
         }
     }
