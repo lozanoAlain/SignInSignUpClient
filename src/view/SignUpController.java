@@ -24,6 +24,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import static javafx.scene.control.Alert.AlertType.ERROR;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -54,7 +55,7 @@ public class SignUpController {
     public Stage getStage() {
         return stage;
     }
-    
+
     private Signable signable;
 
     /**
@@ -128,7 +129,7 @@ public class SignUpController {
         } catch (Exception ex) {
             Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         getStage().show();
 
     }
@@ -157,11 +158,11 @@ public class SignUpController {
      * @param newValue
      */
     private void fullNameFocusChanged(ObservableValue observable, Boolean oldValue, Boolean newValue) {
-        
-        if(newValue){
+
+        if (newValue) {
             logger.info("onFocus");
-            
-        }else if(oldValue){
+
+        } else if (oldValue) {
             try {
                 logger.info("onBlur");
                 check255(txtFullName.getText(), lblFullNameError);
@@ -298,6 +299,10 @@ public class SignUpController {
                 checkPasswords();
                 User user = addUser();
                 signable.signUp(user);
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("SIGN UP");
+                alert.setContentText("User added correctly");
+                alert.show();
 
             } catch (RepeatPasswordException ex) {
                 errorLabel(lblPasswordError, ex);
@@ -306,7 +311,7 @@ public class SignUpController {
                 txtRepeatPassword.setText("");
                 txtPassword.requestFocus();
                 logger.warning(ex.getMessage());
-            }catch(ExistUserException ex){
+            } catch (ExistUserException ex) {
                 logger.warning(ex.getMessage());
             } catch (ConnectionErrorException ex) {
                 logger.warning(ex.getMessage());
@@ -334,11 +339,11 @@ public class SignUpController {
             getStage().close();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignInWindow.fxml"));
             Parent root = (Parent) loader.load();
-            
+
             SignInWindowController controller = (SignInWindowController) loader.getController();
             controller.setStage(stage);
             controller.initStage(root);
-            
+
         } catch (Exception ex) {
             lblFullNameError.setText(ex.getMessage());
             logger.warning(ex.getMessage());
@@ -408,7 +413,6 @@ public class SignUpController {
     Validate that the password entered in the Repeat Password field (txtRepeatPassword) is the same as the one entered in the Password field (txtPassword).
     If it is not the same (RepeatPasswordException()), an error label (lblRepeatPasswordError) is shown and the two password fields are deleted.
      */
-
     /**
      *
      * @throws RepeatPasswordException
