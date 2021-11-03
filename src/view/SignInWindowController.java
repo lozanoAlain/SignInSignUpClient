@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package view;
 
 import dataModel.User;
@@ -16,6 +11,10 @@ import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import static javafx.fxml.FXMLLoader.load;
+import static javafx.fxml.FXMLLoader.load;
+import static javafx.fxml.FXMLLoader.load;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -90,6 +89,7 @@ public class SignInWindowController {
         //The here hyperlink (hlkHere) is enabled.
         Scene scene = new Scene(root);
         stage.setScene(scene);
+
         Logger.getLogger(SignInWindowController.class.getName()).log(Level.INFO, "Initializing stage.");
         //The window title
         stage.setTitle("Sign In Window");
@@ -103,7 +103,7 @@ public class SignInWindowController {
         //The error labels (lblUsernameError and lblPasswordError) are not visible.
         lblPasswordError.setVisible(false);
         lblUsernameError.setVisible(false);
-        
+
         //some tooltips to help the user
         btnLogin.setTooltip(new Tooltip("Click to log in"));
         hlkHere.setTooltip(new Tooltip("Click to go to the Sign up window and register"));
@@ -129,28 +129,37 @@ public class SignInWindowController {
         checkIsNotEmpty(txtPassword, lblPasswordError);
         checkNoLonger255(txtPassword, lblPasswordError);
         //Check that the user exist or not
-      //  checkUserExist(txtUsername, txtPassword);
+        //  checkUserExist(txtUsername, txtPassword);
     }
 
     /**
-     * Handles the hyperlink field. Opens the sign up window as modal.
+     * Handles the hyperlink field.
      *
      * @param event
      * @throws IOException
      */
     @FXML
     public void hlkHerePressed(ActionEvent event) throws IOException {
-        stage.close();
-        //opens the Sign Up window
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignUpWindow.fxml"));
-
+        //Opens the Sign Up window
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("SignUpWindow.fxml"));
+        
+        //Creates a new stage
+        Stage stageSignUp = new Stage();
         Parent root = (Parent) loader.load();
 
-        SignUpController controller = ((SignUpController) loader.getController());
+        //Gets sign up controller
+        SignUpController signUpController = ((SignUpController) loader.getController());
 
-        controller.setStage(stage);
-        controller.initStage(root);
+        //Set the stage that we already created to the sign up controller
+        signUpController.setStage(stageSignUp);
 
+        //Opening application as modal
+        stageSignUp.initModality(Modality.APPLICATION_MODAL);
+        stageSignUp.initOwner(
+                ((Node) event.getSource()).getScene().getWindow());
+
+        Logger.getLogger(SignInWindowController.class.getName()).log(Level.INFO, "Initializing stage.");
+        signUpController.initStage(root);
     }
 
     /**
@@ -172,11 +181,12 @@ public class SignInWindowController {
         //The login button (btnLogin) is focused.
         stage.setOnShowing(this::handleOnWindowSignUp);
     }
-    
+
     /**
-     * 
+     * Checks the field is no longer than 255 characters
+     *
      * @param text
-     * @param lblError 
+     * @param lblError
      * @exception FieldTooLongException
      */
     private void checkNoLonger255(TextField text, Label lblError) {
@@ -194,6 +204,7 @@ public class SignInWindowController {
     }
 
     /**
+     * Check that the field is not empty
      *
      * @param text
      * @param lblError
@@ -263,7 +274,6 @@ public class SignInWindowController {
     }
     }
     }*/
-
     /**
      * Focus the username field.
      *
@@ -291,7 +301,7 @@ public class SignInWindowController {
      * @return
      * @exception IncorrectPasswordException
      */
-    /*   private boolean signin(TextField txtUsername, PasswordField txtPassword) {
+    /* private boolean signin(TextField txtUsername, PasswordField txtPassword) {
     User user = new User();
     user.setLogin(txtUsername.getText());
     user.setPassword(txtPassword.getText());
