@@ -76,17 +76,18 @@ public class SignableImplementation implements Signable{
         ois = new ObjectInputStream(sc.getInputStream());
         data = (DataEncapsulation) ois.readObject();
         user = data.getUser();
-        int message = data.getMessage().ordinal();
         oos.close();
         ois.close();
         sc.close();
-        switch(message){
-            case 5:
-                data.setMessage(MessageEnum.SIGN_UP_OK);
-            case 6:
+        switch(data.getMessage()){
+            case SIGN_UP_OK:
+                break;
+            case SIGN_UP_ERROR_USER:
                 throw new ExistUserException();
-            default:
+            case CONNECTION_ERROR:
                 throw new ConnectionErrorException();
+            default:
+                System.out.println("Otros");
         }
     }
      
