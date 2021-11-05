@@ -115,6 +115,7 @@ public class SignUpController {
         getStage().setResizable(false);
 
         stage.setOnShowing(this::handleWindowShowing);
+        txtFullName.textProperty().addListener(this::fullNameTextChanged);
         txtFullName.focusedProperty().addListener(this::fullNameFocusChanged);
         txtUsername.textProperty().addListener(this::usernameTextChanged);
         txtMail.textProperty().addListener(this::mailTextChanged);
@@ -122,6 +123,12 @@ public class SignUpController {
         txtRepeatPassword.textProperty().addListener(this::repeatPasswordTextChanged);
         btnBack.setOnAction(this::handleButtonBack);
         btnRegister.setOnAction(this::handleButtonRegister);
+
+        lblFullNameError.setVisible(false);
+        lblMailError.setVisible(false);
+        lblPasswordError.setVisible(false);
+        lblRepeatPasswordError.setVisible(false);
+        lblUsernameError.setVisible(false);
 
         SignableFactory signableFactory = new SignableFactory();
         try {
@@ -142,10 +149,28 @@ public class SignUpController {
 
     }
 
-
     /*
     Check that the Full Name field (txtFullName) is no longer than 255 characters (checkNoLonger255()).
     If it is not correct (FieldTooLongException()), an error label (lblFullNameError) is shown and the register button(btnRegister is disabled.
+     */
+    /**
+     *
+     * @param observable
+     * @param oldValue
+     * @param newValue
+     */
+    private void fullNameTextChanged(ObservableValue observable, String oldValue, String newValue) {
+
+        try {
+            if (!newValue.equalsIgnoreCase(oldValue)) {
+                check255(txtFullName.getText(), lblFullNameError);
+            }
+        } catch (FieldTooLongException ex) {
+            errorLabel(lblFullNameError, ex);
+        }
+    }
+
+    /*
 
     Check that the Full name (txtFullName) has at least 1 blank (checkWhiteSpace())
     If it is not correct (FullNameException()), an error label (lblFullNameError) is shown and the register button(btnRegister is disabled.
@@ -161,14 +186,10 @@ public class SignUpController {
 
         if (newValue) {
             logger.info("onFocus");
-
         } else if (oldValue) {
             try {
                 logger.info("onBlur");
-                check255(txtFullName.getText(), lblFullNameError);
                 checkWhiteSpace(txtFullName.getText(), lblFullNameError);
-            } catch (FieldTooLongException ex) {
-                errorLabel(lblFullNameError, ex);
             } catch (FullNameException ex) {
                 errorLabel(lblFullNameError, ex);
             }
@@ -189,7 +210,9 @@ public class SignUpController {
     private void usernameTextChanged(ObservableValue observable, String oldValue, String newValue) {
 
         try {
-            check255(txtUsername.getText(), lblUsernameError);
+            if (!newValue.equalsIgnoreCase(oldValue)) {
+                check255(txtUsername.getText(), lblUsernameError);
+            }
         } catch (FieldTooLongException ex) {
             errorLabel(lblUsernameError, ex);
         }
@@ -209,7 +232,9 @@ public class SignUpController {
     private void mailTextChanged(ObservableValue observable, String oldValue, String newValue) {
 
         try {
-            check255(txtMail.getText(), lblMailError);
+            if (!newValue.equalsIgnoreCase(oldValue)) {
+                check255(txtMail.getText(), lblMailError);
+            }
         } catch (FieldTooLongException ex) {
             errorLabel(lblMailError, ex);
 
@@ -230,7 +255,9 @@ public class SignUpController {
     private void passwordTextChanged(ObservableValue observable, String oldValue, String newValue) {
 
         try {
-            check255(new String(txtPassword.getText()), lblPasswordError);
+            if (!newValue.equalsIgnoreCase(oldValue)) {
+                check255(new String(txtPassword.getText()), lblPasswordError);
+            }
         } catch (FieldTooLongException ex) {
             errorLabel(lblPasswordError, ex);
 
@@ -251,7 +278,9 @@ public class SignUpController {
     private void repeatPasswordTextChanged(ObservableValue observable, String oldValue, String newValue) {
 
         try {
-            check255(new String(txtRepeatPassword.getText()), lblRepeatPasswordError);
+            if (!newValue.equalsIgnoreCase(oldValue)) {
+                check255(new String(txtRepeatPassword.getText()), lblRepeatPasswordError);
+            }
         } catch (FieldTooLongException ex) {
             errorLabel(lblRepeatPasswordError, ex);
 
@@ -259,13 +288,14 @@ public class SignUpController {
     }
 
     private void errorLabel(Label lbl, Exception ex) {
+        lbl.setVisible(true);
         lbl.setText(ex.getMessage());
         lbl.setStyle("-fx-text-fill: red; -fx-font-size: 13px");
         logger.warning(ex.getMessage());
     }
 
     private void check255(String text, Label lbl) throws FieldTooLongException {
-        if (text.length() > 5) {
+        if (text.length() > 255) {
             btnRegister.setDisable(true);
             throw new FieldTooLongException();
         } else {

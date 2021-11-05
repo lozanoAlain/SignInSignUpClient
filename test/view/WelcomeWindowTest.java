@@ -31,6 +31,7 @@ public class WelcomeWindowTest extends ApplicationTest {
 
         WelcomeWindowController welcomeWindowController = (loader.getController());
         welcomeWindowController.setStage(stage);
+
      //   welcomeWindowController.initStage(root,);
     }
 
