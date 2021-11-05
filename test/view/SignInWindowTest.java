@@ -1,4 +1,4 @@
-package tests;
+package view;
 
 import clientApplication.ClientApplication;
 import javafx.stage.Stage;
