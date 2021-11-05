@@ -54,8 +54,9 @@ public class WelcomeWindowController {
      * Initializes the window
      *
      * @param root
+     * @param text
      */
-    public void initStage(Parent root) {
+    public void initStage(Parent root, String text) {
         //Exit button (btnExit) and Log out button (btnLogOut) are enabled.
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -134,4 +135,6 @@ public class WelcomeWindowController {
             signInWindowController.initStage(root);
         }
     }
+
+   
 }

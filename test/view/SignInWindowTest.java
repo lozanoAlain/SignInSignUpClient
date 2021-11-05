@@ -21,8 +21,8 @@ import static org.testfx.matcher.control.LabeledMatchers.hasText;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SignInWindowTest extends ApplicationTest {
 
-    private static final String OVERSIZED_TEXT = 
-              "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+
+    private static final String OVERSIZED_TEXT = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             + "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             + "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             + "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
