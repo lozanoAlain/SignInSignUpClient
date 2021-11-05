@@ -13,9 +13,6 @@ import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import static javafx.fxml.FXMLLoader.load;
-import static javafx.fxml.FXMLLoader.load;
-import static javafx.fxml.FXMLLoader.load;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -130,19 +127,35 @@ public class SignInWindowController {
      * multiple errors if doesnt match the cryteria.
      *
      * @param event
-     * @throws IOException
      */
     @FXML
-    public void handleBtnLoginPressed(ActionEvent event) throws IOException {
+    public void handleBtnLoginPressed(ActionEvent event) {
         try {
             //Check username and shows user errors
             checkIsNotEmpty(txtUsername, lblUsernameError);
             checkNoLonger255(txtUsername, lblUsernameError);
+            
             //Check password and shows password error
             checkIsNotEmpty(txtPassword, lblPasswordError);
             checkNoLonger255(txtPassword, lblPasswordError);
+            
             //Check that the user exist or not
             checkUserExist(txtUsername, txtPassword);
+        } catch (EmptyFieldsException ex) {
+            //The error label is shown
+            
+            errorLabel(lblUsernameError, ex);
+            errorLabel(lblPasswordError, ex);
+        } catch (UserNotExistException ex) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("User does not exist");
+            alert.setHeaderText(ex.getMessage());
+            alert.setContentText("Ooops, there was an error! Try to write a valid username.");
+            alert.showAndWait();
+            logger.warning(ex.getMessage());
+            lblPasswordError.setDisable(true);
+            lblUsernameError.setDisable(true);
+
         } catch (Exception ex) {
             Logger.getLogger(SignInWindowController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -152,30 +165,33 @@ public class SignInWindowController {
      * Handles the hyperlink field.
      *
      * @param event
-     * @throws IOException
      */
     @FXML
-    public void hlkHerePressed(ActionEvent event) throws IOException {
-        //Opens the Sign Up window
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("SignUpWindow.fxml"));
+    public void hlkHerePressed(ActionEvent event) {
+        try {
+            //Opens the Sign Up window
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("SignUpWindow.fxml"));
 
-        //Creates a new stage
-        Stage stageSignUp = new Stage();
-        Parent root = (Parent) loader.load();
+            //Creates a new stage
+            Stage stageSignUp = new Stage();
+            Parent root = (Parent) loader.load();
 
-        //Gets sign up controller
-        SignUpController signUpController = ((SignUpController) loader.getController());
+            //Gets sign up controller
+            SignUpController signUpController = ((SignUpController) loader.getController());
 
-        //Set the stage that we already created to the sign up controller
-        signUpController.setStage(stageSignUp);
+            //Set the stage that we already created to the sign up controller
+            signUpController.setStage(stageSignUp);
 
-        //Opening application as modal
-        stageSignUp.initModality(Modality.APPLICATION_MODAL);
-        stageSignUp.initOwner(
-                ((Node) event.getSource()).getScene().getWindow());
+            //Opening application as modal
+            stageSignUp.initModality(Modality.APPLICATION_MODAL);
+            stageSignUp.initOwner(
+                    ((Node) event.getSource()).getScene().getWindow());
 
-        Logger.getLogger(SignInWindowController.class.getName()).log(Level.INFO, "Initializing stage.");
-        signUpController.initStage(root);
+            Logger.getLogger(SignInWindowController.class.getName()).log(Level.INFO, "Initializing stage.");
+            signUpController.initStage(root);
+        } catch (IOException ex) {
+            Logger.getLogger(SignInWindowController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -226,18 +242,11 @@ public class SignInWindowController {
      * @param lblError
      * @exception EmptyFieldsException
      */
-    private void checkIsNotEmpty(TextField text, Label lblError) {
+    private void checkIsNotEmpty(TextField text, Label lblError) throws EmptyFieldsException {
         // If the fields are empty, an error label is shown.
         if (text.getText().trim().isEmpty()) {
-            try {
-                lblError.setVisible(true);
-                throw new EmptyFieldsException();
 
-            } catch (EmptyFieldsException ex) {
-                //The error label is shown
-                lblError.setText(ex.getMessage());
-                logger.warning(ex.getMessage());
-            }
+            throw new EmptyFieldsException();
         }
     }
 
@@ -247,15 +256,30 @@ public class SignInWindowController {
      * @param txtPassword
      * @exception UserNotExistException
      */
-    private void checkUserExist(TextField txtUsername, PasswordField txtPassword) throws Exception {
+    private void checkUserExist(TextField txtUsername, PasswordField txtPassword) throws UserNotExistException, IncorrectPasswordException {
+        User user = null;
         try {
-            User user = new User();
+            user = new User();
             user.setLogin(txtUsername.getText());
             user.setPassword(txtPassword.getText());
-            signable.signIn(user);
-            openWelcomeWindow();
+            user = signable.signIn(user);
 
-        } catch (UserNotExistException ex) {
+            openWelcomeWindow(user);
+        } catch (ConnectionErrorException ex) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Conection error");
+            alert.setHeaderText(ex.getMessage());
+            alert.setContentText("Ooops, there was an error! Impossible to conect to the server.");
+            alert.showAndWait();
+            logger.warning(ex.getMessage());
+        } catch (Exception ex) {
+            if (user == null) {
+                throw new UserNotExistException();
+            }
+            throw new IncorrectPasswordException();
+        }
+
+    }/* catch (UserNotExistException ex) {
             //shows an alert
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("User does not exist");
@@ -273,10 +297,8 @@ public class SignInWindowController {
             alert.setContentText("Ooops, there was an error! Impossible to conect to the server.");
             alert.showAndWait();
             logger.warning(ex.getMessage());
-        } catch (Exception ex) {
-            logger.warning(ex.getMessage());
-        }
-    }
+        }*/
+
 
     /**
      * Focus the username field.
@@ -298,10 +320,10 @@ public class SignInWindowController {
         btnLogin.isFocused();
     }
 
-    private void openWelcomeWindow() {
+    private void openWelcomeWindow(User user) {
         try {
             //Opens the Welcome window
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("WelcomeWindowController.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("WelcomeWindow.fxml"));
             Parent root = (Parent) loader.load();
 
             //Gets Welcome window controller
@@ -315,5 +337,11 @@ public class SignInWindowController {
         } catch (IOException ex) {
             Logger.getLogger(SignInWindowController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void errorLabel(Label lbl, EmptyFieldsException ex) {
+       lbl.setVisible(true);
+       lbl.setText(ex.getMessage());
+       logger.severe(ex.getMessage());
     }
 }
