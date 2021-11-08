@@ -64,6 +64,7 @@ public class SignInWindowTest extends ApplicationTest {
     public void testB_HyperlinkHlkHere() {
         clickOn("#hlkHere");
         verifyThat(window("Sign Up Window"), WindowMatchers.isShowing());
+        clickOn("#btnBack");
     }
 
     /**

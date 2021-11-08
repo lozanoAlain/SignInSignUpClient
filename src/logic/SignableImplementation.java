@@ -57,7 +57,7 @@ public class SignableImplementation implements Signable {
                 case SIGN_IN_OK:
                     return user;
                 case SIGN_IN_ERROR_USER:
-                    throw new UserNotExistException();
+                    throw new UserNotExistException();                  
                 case SIGN_IN_ERROR_PASSWORD:
                     throw new IncorrectPasswordException();
                 default:
