@@ -10,6 +10,7 @@ import exceptions.UserNotExistException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -102,6 +103,10 @@ public class SignInWindowController {
         //The username (txtUsername) field is focused.
         stage.setOnShowing(this::handleOnWindow);
 
+        txtUsername.textProperty().addListener(this::txtUsernameChanged);
+        txtUsername.textProperty().addListener(this::txtUsernameEmpty);
+        txtPassword.textProperty().addListener(this::txtPasswordChanged);
+        txtPassword.textProperty().addListener(this::txtPasswordEmpty);
         //The error labels (lblUsernameError and lblPasswordError) are not visible.
         lblPasswordError.setVisible(false);
         lblUsernameError.setVisible(false);
@@ -122,6 +127,43 @@ public class SignInWindowController {
         Logger.getLogger(SignInWindowController.class.getName()).log(Level.INFO, "Showing stage");
     }
 
+    private void txtUsernameChanged(ObservableValue observable, String oldValue, String newValue) {
+        try {
+            if (!newValue.equalsIgnoreCase(oldValue)) {
+                checkNoLonger255(txtUsername, lblUsernameError);
+            }
+        } catch (FieldTooLongException ex) {
+            //The error label is shown
+            lblUsernameError.setText(ex.getMessage());
+            logger.warning(ex.getMessage());
+        }
+    }
+
+    private void txtUsernameEmpty(ObservableValue observable, String oldValue, String newValue) {
+
+        if (!newValue.equalsIgnoreCase(oldValue)) {
+            checkIsNotEmpty(txtUsername, lblUsernameError);
+        }
+    }
+
+    private void txtPasswordChanged(ObservableValue observable, String oldValue, String newValue) {
+        try {
+            if (!newValue.equalsIgnoreCase(oldValue)) {
+                checkNoLonger255(txtPassword, lblPasswordError);
+            }
+        } catch (FieldTooLongException ex) {
+            //The error label is shown           
+            lblPasswordError.setText(ex.getMessage());
+            logger.warning(ex.getMessage());
+        }
+    }
+
+    private void txtPasswordEmpty(ObservableValue observable, String oldValue, String newValue) {
+        if (!newValue.equalsIgnoreCase(oldValue)) {
+            checkIsNotEmpty(txtPassword, lblPasswordError);
+        }
+    }
+
     /**
      * Handels the login button, checks the username and password and shows
      * multiple errors if doesnt match the cryteria.
@@ -130,35 +172,26 @@ public class SignInWindowController {
      */
     @FXML
     public void handleBtnLoginPressed(ActionEvent event) {
+
         try {
-            //Check username and shows user errors
+            Logger.getLogger(SignInWindowController.class.getName()).log(Level.INFO, "Log in button pressd.");
+
             checkIsNotEmpty(txtUsername, lblUsernameError);
-            checkNoLonger255(txtUsername, lblUsernameError);
-            
-            //Check password and shows password error
             checkIsNotEmpty(txtPassword, lblPasswordError);
-            checkNoLonger255(txtPassword, lblPasswordError);
-            
             //Check that the user exist or not
-            checkUserExist(txtUsername, txtPassword);
-        } catch (EmptyFieldsException ex) {
-            //The error label is shown
-            
-            errorLabel(lblUsernameError, ex);
-            errorLabel(lblPasswordError, ex);
-        } catch (UserNotExistException ex) {
+            if (!lblUsernameError.isVisible() || !lblPasswordError.isVisible()) {
+                checkUserExist(txtUsername, txtPassword);
+            }
+        } catch (ConnectionErrorException ex) {
+            //shows an alert
             Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("User does not exist");
+            alert.setTitle("Conection error");
             alert.setHeaderText(ex.getMessage());
-            alert.setContentText("Ooops, there was an error! Try to write a valid username.");
+            alert.setContentText("Ooops, there was an error! Impossible to conect to the server.");
             alert.showAndWait();
             logger.warning(ex.getMessage());
-            lblPasswordError.setDisable(true);
-            lblUsernameError.setDisable(true);
-
-        } catch (Exception ex) {
-            Logger.getLogger(SignInWindowController.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
     /**
@@ -221,17 +254,16 @@ public class SignInWindowController {
      * @param lblError
      * @exception FieldTooLongException
      */
-    private void checkNoLonger255(TextField text, Label lblError) {
+    private void checkNoLonger255(TextField text, Label lblError) throws FieldTooLongException {
         // If the field is longer than 255, an error label is shown.
         if (text.getLength() > 255) {
-            try {
-                lblError.setVisible(true);
-                throw new FieldTooLongException();
-            } catch (FieldTooLongException ex) {
-                //The error label is shown
-                lblError.setText(ex.getMessage());
-                logger.warning(ex.getMessage());
-            }
+
+            lblError.setVisible(true);
+            btnLogin.setDisable(true);
+            throw new FieldTooLongException();
+        } else {
+            btnLogin.setDisable(false);
+            lblError.setVisible(false);
         }
     }
 
@@ -242,11 +274,18 @@ public class SignInWindowController {
      * @param lblError
      * @exception EmptyFieldsException
      */
-    private void checkIsNotEmpty(TextField text, Label lblError) throws EmptyFieldsException {
-        // If the fields are empty, an error label is shown.
-        if (text.getText().trim().isEmpty()) {
-
-            throw new EmptyFieldsException();
+    private void checkIsNotEmpty(TextField text, Label lblError) {
+        try {
+            // If the fields are empty, an error label is shown.
+            if (text.getText().trim().isEmpty()) {
+                throw new EmptyFieldsException();
+            } else {
+                lblError.setVisible(false);
+            }
+        } catch (EmptyFieldsException ex) {
+            lblError.setVisible(true);
+            lblError.setText(ex.getMessage());
+            logger.warning(ex.getMessage());
         }
     }
 
@@ -256,7 +295,7 @@ public class SignInWindowController {
      * @param txtPassword
      * @exception UserNotExistException
      */
-    private void checkUserExist(TextField txtUsername, PasswordField txtPassword) throws UserNotExistException, IncorrectPasswordException {
+    private void checkUserExist(TextField txtUsername, PasswordField txtPassword) throws ConnectionErrorException {
         User user = null;
         try {
             user = new User();
@@ -272,11 +311,27 @@ public class SignInWindowController {
             alert.setContentText("Ooops, there was an error! Impossible to conect to the server.");
             alert.showAndWait();
             logger.warning(ex.getMessage());
+        } catch (IncorrectPasswordException ex) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Password is incorrect");
+            alert.setHeaderText(ex.getMessage());
+            alert.setContentText("Ooops, there was an error! Try to write a valid password.");
+            alert.showAndWait();
+            logger.warning(ex.getMessage());
+            lblPasswordError.setDisable(false);
+            lblUsernameError.setDisable(true);
+        } catch (UserNotExistException ex) {
+            //shows an alert
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("User does not exist");
+            alert.setHeaderText(ex.getMessage());
+            alert.setContentText("Ooops, there was an error! Try to write a valid username.");
+            alert.showAndWait();
+            logger.warning(ex.getMessage());
+            lblPasswordError.setDisable(true);
+            lblUsernameError.setDisable(true);
         } catch (Exception ex) {
-            if (user == null) {
-                throw new UserNotExistException();
-            }
-            throw new IncorrectPasswordException();
+            throw new ConnectionErrorException();
         }
 
     }/* catch (UserNotExistException ex) {
@@ -340,8 +395,8 @@ public class SignInWindowController {
     }
 
     private void errorLabel(Label lbl, EmptyFieldsException ex) {
-       lbl.setVisible(true);
-       lbl.setText(ex.getMessage());
-       logger.severe(ex.getMessage());
+        lbl.setVisible(true);
+        lbl.setText(ex.getMessage());
+        logger.severe(ex.getMessage());
     }
 }
