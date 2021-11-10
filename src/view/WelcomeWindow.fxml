@@ -30,7 +30,7 @@
                         </Label>
                     </children>
                 </AnchorPane>
-                <Button fx:id="btnExit" defaultButton="true" layoutX="547.0" layoutY="334.0" mnemonicParsing="false" onAction="#handleBtnExitPressed" prefHeight="25.0" prefWidth="64.0" text="Exit" textFill="#53635c">
+                <Button fx:id="btnExit" defaultButton="true" layoutX="547.0" layoutY="334.0" mnemonicParsing="false" onAction="#handleBtnExitPressed" prefHeight="25.0" prefWidth="75.0" text="Exit" textFill="#53635c">
                     <cursor>
                         <Cursor fx:constant="HAND" />
                     </cursor>
@@ -40,7 +40,7 @@
                         <Font size="53.0" />
                     </font>
                 </Label>
-            <Button fx:id="btnLogOut" layoutX="477.0" layoutY="335.0" mnemonicParsing="false" onAction="#handleBtnLogOutPressed" prefHeight="25.0" prefWidth="64.0" text="Log out" textFill="#53635c">
+            <Button fx:id="btnLogOut" layoutX="460.0" layoutY="335.0" mnemonicParsing="false" onAction="#handleBtnLogOutPressed" prefHeight="25.0" prefWidth="75.0" text="Log out" textFill="#53635c">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>

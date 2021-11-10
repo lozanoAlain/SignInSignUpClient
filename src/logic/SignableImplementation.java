@@ -16,13 +16,14 @@ import exceptions.UserNotExistException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.ConnectException;
 import java.net.Socket;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
+ * This class is for getting the connection between the server and the client,
+ * sending the dataEncapsulation that is collected in the Sign In window or Sign
+ * Up window, and takes the dataEncapsulation we receive from the server and
+ * sends it to the required window
  *
  * @author Alain Lozano, Ilia Consuegra
  */
@@ -33,6 +34,19 @@ public class SignableImplementation implements Signable {
 
     private DataEncapsulation data = null;
 
+    /**
+     * The method that receives the user and sends it to the server to check the
+     * database and log in.
+     *
+     * @param user The user that is collected from the window
+     * @return user that is returned to the window from the database
+     * @throws UserNotExistException Is thrown in case the user do not exist in
+     * the database
+     * @throws IncorrectPasswordException Is thrown in case the password is
+     * incorrect for the user that is sent
+     * @throws ConnectionErrorException Is thrown in case there is an error in
+     * the connection between the server and the client
+     */
     @Override
     public User signIn(User user) throws UserNotExistException, IncorrectPasswordException, ConnectionErrorException {
         Socket sc;
@@ -57,7 +71,7 @@ public class SignableImplementation implements Signable {
                 case SIGN_IN_OK:
                     return user;
                 case SIGN_IN_ERROR_USER:
-                    throw new UserNotExistException();                  
+                    throw new UserNotExistException();
                 case SIGN_IN_ERROR_PASSWORD:
                     throw new IncorrectPasswordException();
                 default:
@@ -66,10 +80,21 @@ public class SignableImplementation implements Signable {
         } catch (IOException ex) {
             throw new ConnectionErrorException();
         } catch (ClassNotFoundException ex) {
-           throw new ConnectionErrorException();
+            throw new ConnectionErrorException();
         }
 
     }
+
+    /**
+     * The method that receives the user and sends it to the server to check the
+     * database and log up.
+     *
+     * @param user The user that is collected from the window
+     * @throws ExistUserException Is thrown in case the user exists in the
+     * database
+     * @throws ConnectionErrorException Is thrown in case there is an error in
+     * the connection between the server and the client
+     */
 
     @Override
     public void signUp(User user) throws ExistUserException, ConnectionErrorException {

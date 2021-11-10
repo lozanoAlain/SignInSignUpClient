@@ -14,7 +14,11 @@ import view.SignInWindowController;
  */
 public class ClientApplication extends Application {
 
-    
+    /**
+     * Method that start the first window(Sign In Window)
+     * @param primaryStage The stage for the window
+     * @throws Exception Throws the exception in case the window doesnt load
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignInWindow.fxml"));
