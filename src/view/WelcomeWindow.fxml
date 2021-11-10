@@ -23,14 +23,14 @@
                 </ImageView>
                 <AnchorPane id="anchorPane" layoutX="229.0" layoutY="120.0" opacity="0.8" prefHeight="184.0" prefWidth="351.0" stylesheets="@css.css">
                     <children>
-                        <Label id="txtWelcome" layoutX="14.0" layoutY="11.0" prefHeight="38.0" prefWidth="382.0" text="Its a pleasure to see you here." textFill="#53635c">
+                        <Label fx:id="txtWelcome" layoutX="14.0" layoutY="11.0" prefHeight="38.0" prefWidth="382.0" textFill="#53635c">
                             <font>
                                 <Font size="18.0" />
                             </font>
                         </Label>
                     </children>
                 </AnchorPane>
-                <Button fx:id="btnExit" defaultButton="true" onAction="#handleBtnExitPressed" layoutX="547.0" layoutY="334.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="64.0" text="Exit" textFill="#53635c">
+                <Button fx:id="btnExit" defaultButton="true" layoutX="547.0" layoutY="334.0" mnemonicParsing="false" onAction="#handleBtnExitPressed" prefHeight="25.0" prefWidth="64.0" text="Exit" textFill="#53635c">
                     <cursor>
                         <Cursor fx:constant="HAND" />
                     </cursor>
@@ -40,7 +40,7 @@
                         <Font size="53.0" />
                     </font>
                 </Label>
-            <Button fx:id="btnLogOut" layoutX="477.0" layoutY="335.0" onAction="#handleBtnLogOutPressed" mnemonicParsing="false" prefHeight="25.0" prefWidth="64.0" text="Log out" textFill="#53635c">
+            <Button fx:id="btnLogOut" layoutX="477.0" layoutY="335.0" mnemonicParsing="false" onAction="#handleBtnLogOutPressed" prefHeight="25.0" prefWidth="64.0" text="Log out" textFill="#53635c">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>

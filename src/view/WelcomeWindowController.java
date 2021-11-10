@@ -1,5 +1,6 @@
 package view;
 
+import dataModel.User;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -14,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
@@ -33,7 +35,8 @@ public class WelcomeWindowController {
     private Button btnLogOut;
 
     @FXML
-    private Label lblGreeting;
+    private Label txtWelcome;
+    private User user;
 
     //Getters and Setters
     /**
@@ -51,12 +54,21 @@ public class WelcomeWindowController {
     }
 
     /**
+     * Get the User
+     *
+     * @param user
+     */
+    public void getUser(User user) {
+        this.user = user;
+    }
+
+    /**
      * Initializes the window
      *
      * @param root
-     * @param text
+     * @param user
      */
-    public void initStage(Parent root, String text) {
+    public void initStage(Parent root,User user) {
         //Exit button (btnExit) and Log out button (btnLogOut) are enabled.
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -73,8 +85,8 @@ public class WelcomeWindowController {
         btnExit.setTooltip(new Tooltip("Click to exit"));
         btnLogOut.setTooltip(new Tooltip("Click to log out (You will be redirected to log in window)"));
 
-        //A text (lblGreeting) with the user's name is displayed.
-        lblGreeting.setText("Hello "); //falta +user
+        //A text (txtWelcome) with the user's name is displayed.
+        txtWelcome.setText("Hello " + user.getLogin());
 
         //Shows stage
         stage.show();
@@ -127,7 +139,7 @@ public class WelcomeWindowController {
             this.btnLogOut.setText("Bye, thanks for using our app.");
 
             //Goes to the Sign in window
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignInWindow.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("SignInWindow.fxml"));
             Parent root = (Parent) loader.load();
 
             SignInWindowController signInWindowController = (loader.getController());
@@ -136,5 +148,6 @@ public class WelcomeWindowController {
         }
     }
 
-   
+    
+
 }
