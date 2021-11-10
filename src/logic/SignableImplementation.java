@@ -28,8 +28,8 @@ import java.util.logging.Logger;
  */
 public class SignableImplementation implements Signable {
 
-    private final static int PORT = Integer.valueOf(ResourceBundle.getBundle("dataModel.ServerConfiguration").getString("Port"));
-    private final static String IP = ResourceBundle.getBundle("dataModel.ServerConfiguration").getString("ServerHost");
+    private final static int PORT = Integer.valueOf(ResourceBundle.getBundle("dataModel.ClientConfiguration").getString("Port"));
+    private final static String IP = ResourceBundle.getBundle("dataModel.ClientConfiguration").getString("ServerHost");
 
     private DataEncapsulation data = null;
 
@@ -72,7 +72,7 @@ public class SignableImplementation implements Signable {
     }
 
     @Override
-    public void signUp(User user) throws ExistUserException, ConnectionErrorException, Exception {
+    public void signUp(User user) throws ExistUserException, ConnectionErrorException {
         Socket sc;
         try {
             sc = new Socket(IP, PORT);
