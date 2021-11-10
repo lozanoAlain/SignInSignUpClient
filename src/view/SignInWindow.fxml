@@ -29,7 +29,7 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <Label fx:id="lblPasswordError" layoutX="144.0" layoutY="91.0" prefHeight="25.0" prefWidth="224.0" textFill="RED">
+                  <Label fx:id="lblPasswordError" layoutX="98.0" layoutY="73.0" prefHeight="25.0" prefWidth="224.0" textFill="RED">
                      <font>
                         <Font size="14.0" />
                      </font>

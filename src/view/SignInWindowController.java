@@ -124,6 +124,7 @@ public class SignInWindowController {
 
         //Shows stage
         stage.show();
+        
         Logger.getLogger(SignInWindowController.class.getName()).log(Level.INFO, "Showing stage");
     }
 
@@ -151,13 +152,12 @@ public class SignInWindowController {
     }
 
     /**
-     *
+     * 
      * @param observable
      * @param oldValue
      * @param newValue
      */
     private void txtUsernameEmpty(ObservableValue observable, String oldValue, String newValue) {
-
         if (!newValue.equalsIgnoreCase(oldValue)) {
             checkEmptyFields(txtUsername, lblUsernameError);
         }
@@ -245,6 +245,7 @@ public class SignInWindowController {
     @FXML
     public void hlkHerePressed(ActionEvent event) {
         try {
+            stage.close();
             //Opens the Sign Up window
             FXMLLoader loader = new FXMLLoader(getClass().getResource("SignUpWindow.fxml"));
 
@@ -275,15 +276,9 @@ public class SignInWindowController {
      * It comes after having pressed the Register button, in the Sign up Window
      *
      */
-    public void initWhenSignUp() {
+    public void initWhenSignUp(User user) {
         //Creates a new user object
-        User user = new User();
-        //  user=comoSeLlameLaFuncionDeEllosQueMeTraeElUser(user);
-        if (user.getLogin().isEmpty()) {
-            //viene de btnBack
-            txtUsername.setText("");
-            txtPassword.setText("");
-        }
+        
         //Fields are completed with the information brought in from the Sign Up window.
         txtUsername.setText(user.getLogin());
         txtPassword.setText(user.getPassword());
@@ -304,7 +299,7 @@ public class SignInWindowController {
      */
     private void checkNoLonger255(TextField text, Label lblError) throws FieldTooLongException {
         // If the field is longer than 255, an error label is shown.
-        if (text.getLength() > 5) {
+        if (text.getLength() > 255) {
 
             //An error label is shown.
             lblError.setVisible(true);
@@ -424,7 +419,7 @@ public class SignInWindowController {
      *  */
     private boolean checkEmptyFields(TextField txt, Label lbl) {
         boolean check = false;
-        if (txt.getText().isEmpty()) {
+        if (txt.getText().trim().isEmpty()) {
             try {
                 check = true;
                 throw new EmptyFieldsException();
