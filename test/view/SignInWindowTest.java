@@ -3,6 +3,7 @@ package view;
 import clientApplication.ClientApplication;
 import javafx.stage.Stage;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.testfx.framework.junit.ApplicationTest;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -16,11 +17,11 @@ import static org.testfx.matcher.control.LabeledMatchers.hasText;
 
 /**
  * This class tests the Sign In window
+ *
  * @author Matteo Fernández
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SignInWindowTest extends ApplicationTest {
-
 
     private static final String OVERSIZED_TEXT = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             + "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
@@ -33,6 +34,7 @@ public class SignInWindowTest extends ApplicationTest {
 
     /**
      * Starts the test with the client application
+     *
      * @param stage
      * @throws Exception
      */
@@ -70,11 +72,11 @@ public class SignInWindowTest extends ApplicationTest {
     /**
      * Test what happens when the password is too long
      */
+   
     @Test
     public void testC_PasswordTooLong() {
         doubleClickOn("#txtPassword");
         write(OVERSIZED_TEXT);
-        clickOn("#btnLogin");
         verifyThat("#lblPasswordError", isVisible());
         verifyThat("#lblPasswordError", hasText("The field is too long (255 character max)."));
     }
@@ -82,34 +84,77 @@ public class SignInWindowTest extends ApplicationTest {
     /**
      * Test what happens when the user is too long
      */
+
     @Test
     public void testD_UserTooLong() {
         doubleClickOn("#txtUsername");
         write(OVERSIZED_TEXT);
-        clickOn("#btnLogin");
         verifyThat("#lblUsernameError", hasText("The field is too long (255 character max)."));
     }
 
     /**
      * Test what happens when the user is empty
      */
+
     @Test
     public void testE_UserIsEmpty() {
         doubleClickOn("#txtUsername");
+        write("matteo");
+        doubleClickOn("#txtUsername");
         write("");
-        clickOn("#btnLogin");
         verifyThat("#lblUsernameError", hasText("The field cannot be empty."));
     }
-    
-     /**
+
+    /**
      * Test what happens when the password is empty
      */
+
     @Test
     public void testF_PasswordIsEmpty() {
         doubleClickOn("#txtPassword");
+        write("aaa");
         write("");
-        clickOn("#btnLogin");
         verifyThat("#lblPasswordError", hasText("The field cannot be empty."));
     }
 
+    /**
+     * Test what happens when the user exist
+     */
+    @Test
+    public void testG_UserExist() {
+        doubleClickOn("#txtUsername");
+        write("matteo");
+        doubleClickOn("#txtPassword");
+        write("abcd*1234");
+        clickOn("#btnLogin");
+        verifyThat(window("Welcome window"), WindowMatchers.isShowing());
+        clickOn("#btnLogOut");
+    }
+
+    /**
+     * Test what happens when the user does not exit
+     */
+    
+    @Test
+    public void testH_UserNotExist() {
+        doubleClickOn("#txtUsername");
+        write("matteosss");
+        doubleClickOn("#txtPassword");
+        write("abcd*1234");
+        clickOn("#btnLogin");
+        verifyThat("The user does not exist.", isVisible());
+    }
+
+    /**
+     * Test what happens when the password does not match.
+     */
+    @Test
+    public void testI_PasswordDoesNotMatch() {
+        doubleClickOn("#txtUsername");
+        write("matteo");
+        doubleClickOn("#txtPassword");
+        write("abcd");
+        clickOn("#btnLogin");
+        verifyThat("The password is incorrect.", isVisible());
+    }
 }
