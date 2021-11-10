@@ -13,10 +13,8 @@ import exceptions.ExistUserException;
 import exceptions.FieldTooLongException;
 import exceptions.FullNameException;
 import exceptions.RepeatPasswordException;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,14 +23,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import static javafx.scene.control.Alert.AlertType.ERROR;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import logic.SignableFactory;
@@ -46,8 +42,6 @@ public class SignUpController {
 
     private Stage stage;
     //Getters and Setters
-    @FXML
-    private Label lblRepeatPasswordError;
 
     /**
      * @return the stage
@@ -55,15 +49,16 @@ public class SignUpController {
     public Stage getStage() {
         return stage;
     }
-
-    private Signable signable;
-
     /**
      * @param stage the stage to set
      */
     public void setStage(Stage stage) {
         this.stage = stage;
     }
+
+    private Signable signable;
+
+    
 
     private final static Logger logger = Logger.getLogger(SignUpController.class.getName());
 
@@ -95,6 +90,10 @@ public class SignUpController {
     private Label lblMailError;
     @FXML
     private Label lblPasswordError;
+    /*@FXML
+    private Label lblPassword2Error;*/
+    @FXML
+    private Label lblRepeatPasswordError;
 
     /*
     The fields Full name (txtFullName), Username (txtUsername), Mail (txtMail), Password (txtPassword) and Repeat password (txtRepeatPassword) are enabled.
@@ -123,18 +122,25 @@ public class SignUpController {
         txtRepeatPassword.textProperty().addListener(this::repeatPasswordTextChanged);
         btnBack.setOnAction(this::handleButtonBack);
         btnRegister.setOnAction(this::handleButtonRegister);
-
+        
         lblFullNameError.setVisible(false);
         lblMailError.setVisible(false);
         lblPasswordError.setVisible(false);
         lblRepeatPasswordError.setVisible(false);
         lblUsernameError.setVisible(false);
+         
+
+        lblFullNameError.setText("");
+        lblUsernameError.setText("");
+        lblMailError.setText("");
+        lblPasswordError.setText("");
+        lblRepeatPasswordError.setText("");
 
         SignableFactory signableFactory = new SignableFactory();
         try {
             signable = signableFactory.getSignable();
         } catch (Exception ex) {
-            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, ex);
+            logger.severe(ex.getMessage());
         }
 
         getStage().show();
@@ -291,7 +297,7 @@ public class SignUpController {
         lbl.setVisible(true);
         lbl.setText(ex.getMessage());
         lbl.setStyle("-fx-text-fill: red; -fx-font-size: 13px");
-        logger.warning(ex.getMessage());
+        logger.severe(ex.getMessage());
     }
 
     private void check255(String text, Label lbl) throws FieldTooLongException {
@@ -300,7 +306,7 @@ public class SignUpController {
             throw new FieldTooLongException();
         } else {
             btnRegister.setDisable(false);
-            lbl.setText("");
+            lbl.setVisible(false);
         }
     }
 
@@ -329,39 +335,39 @@ public class SignUpController {
                 checkPasswords();
                 User user = addUser();
                 signable.signUp(user);
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle("SIGN UP");
-                alert.setContentText("User added correctly");
-                alert.show();
+                Alert alertUserAddedCorrectly = new Alert(AlertType.INFORMATION);
+                alertUserAddedCorrectly.setTitle("SIGN UP");
+                alertUserAddedCorrectly.setContentText("User added correctly");
+                alertUserAddedCorrectly.show();
 
             } catch (RepeatPasswordException ex) {
+                //errorLabel(lblPassword2Error, ex);
                 errorLabel(lblPasswordError, ex);
                 errorLabel(lblRepeatPasswordError, ex);
                 txtPassword.setText("");
                 txtRepeatPassword.setText("");
                 txtPassword.requestFocus();
-                logger.warning(ex.getMessage());
             } catch (ExistUserException ex) {
-                logger.warning(ex.getMessage());
+                Alert alertUserAlreadyExists = new Alert(AlertType.INFORMATION);
+                alertUserAlreadyExists.setTitle("SIGN UP");
+                alertUserAlreadyExists.setContentText(ex.getMessage());
+                alertUserAlreadyExists.show();
+                logger.severe(ex.getMessage());
             } catch (ConnectionErrorException ex) {
-                logger.warning(ex.getMessage());
+                Alert alertConnectionError = new Alert(AlertType.INFORMATION);
+                alertConnectionError.setTitle("SIGN UP");
+                alertConnectionError.setContentText(ex.getMessage());
+                alertConnectionError.show();
+                logger.severe(ex.getMessage());
             } catch (Exception ex) {
-                logger.warning(ex.getMessage());
+                Alert alertConnectionError = new Alert(AlertType.INFORMATION);
+                alertConnectionError.setTitle("SIGN UP");
+                alertConnectionError.setContentText(ex.getMessage());
+                alertConnectionError.show();
+                logger.severe(ex.getMessage());
             }
         }
-        /*
-        try{
-         addUser();
-        
-        }catch(ExistUserException ex){
-            Alert alert = new Alert(ERROR);
-            alert.setTitle("Error Message");
-            alert.setHeaderText(ex.getMessage());
-            alert.setContentText("Oops, try signing in with the user you enter.");
-            alert.showAndWait();
-            logger.warning(ex.getMessage());
-        }
-         */
+
     }
 
     private void handleButtonBack(ActionEvent event) {
@@ -376,7 +382,7 @@ public class SignUpController {
 
         } catch (Exception ex) {
             lblFullNameError.setText(ex.getMessage());
-            logger.warning(ex.getMessage());
+            logger.severe(ex.getMessage());
         }
     }
 
@@ -393,7 +399,7 @@ public class SignUpController {
                 throw new EmptyFieldsException();
             } catch (EmptyFieldsException ex) {
                 errorLabel(lblRepeatPasswordError, ex);
-                logger.warning(ex.getMessage());
+                logger.severe(ex.getMessage());
             }
         }
         if (new String(txtPassword.getText()).isEmpty()) {
@@ -403,7 +409,7 @@ public class SignUpController {
                 throw new EmptyFieldsException();
             } catch (EmptyFieldsException ex) {
                 errorLabel(lblPasswordError, ex);
-                logger.warning(ex.getMessage());
+                logger.severe(ex.getMessage());
             }
         }
         if (txtMail.getText().isEmpty()) {
@@ -413,7 +419,7 @@ public class SignUpController {
                 throw new EmptyFieldsException();
             } catch (EmptyFieldsException ex) {
                 errorLabel(lblMailError, ex);
-                logger.warning(ex.getMessage());
+                logger.severe(ex.getMessage());
             }
         }
         if (txtUsername.getText().isEmpty()) {
@@ -423,7 +429,7 @@ public class SignUpController {
                 throw new EmptyFieldsException();
             } catch (EmptyFieldsException ex) {
                 errorLabel(lblUsernameError, ex);
-                logger.warning(ex.getMessage());
+                logger.severe(ex.getMessage());
             }
         }
         if (txtFullName.getText().isEmpty()) {
@@ -433,7 +439,7 @@ public class SignUpController {
                 throw new EmptyFieldsException();
             } catch (EmptyFieldsException ex) {
                 errorLabel(lblFullNameError, ex);
-                logger.warning(ex.getMessage());
+                logger.severe(ex.getMessage());
             }
         }
         return check;

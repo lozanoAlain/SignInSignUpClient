@@ -8,11 +8,16 @@ package logic;
 import dataModel.Signable;
 
 /**
- *
- * @author 
+ * Class for the Signable Factory
+ * @author Alain Lozano, Ilia Consuegra
  */
 public class SignableFactory {
 
+    /**
+     * 
+     * @return signable
+     * @throws Exception 
+     */
     public Signable getSignable() throws Exception{
         Signable signable;
         signable = new SignableImplementation();
