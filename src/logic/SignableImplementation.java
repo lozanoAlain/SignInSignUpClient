@@ -18,6 +18,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class is for getting the connection between the server and the client,
@@ -49,7 +51,7 @@ public class SignableImplementation implements Signable {
      */
     @Override
     public User signIn(User user) throws UserNotExistException, IncorrectPasswordException, ConnectionErrorException {
-        Socket sc;
+        Socket sc = null;
         try {
             sc = new Socket(IP, PORT);
             ObjectOutputStream oos = null;
@@ -74,14 +76,18 @@ public class SignableImplementation implements Signable {
                     throw new UserNotExistException();
                 case SIGN_IN_ERROR_PASSWORD:
                     throw new IncorrectPasswordException();
+                case CONNECTION_ERROR:
+                    throw new ConnectionErrorException();
                 default:
                     throw new ConnectionErrorException();
             }
-        } catch (IOException ex) {
+        } catch (java.net.ConnectException ex) {
             throw new ConnectionErrorException();
         } catch (ClassNotFoundException ex) {
             throw new ConnectionErrorException();
-        }
+        } catch (IOException ex) {
+            throw new ConnectionErrorException();
+        } 
 
     }
 
@@ -95,7 +101,6 @@ public class SignableImplementation implements Signable {
      * @throws ConnectionErrorException Is thrown in case there is an error in
      * the connection between the server and the client
      */
-
     @Override
     public void signUp(User user) throws ExistUserException, ConnectionErrorException {
         Socket sc;

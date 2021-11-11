@@ -5,27 +5,21 @@
  */
 package view;
 
-import clientApplication.ClientApplication;
-import java.util.concurrent.TimeoutException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.runners.MethodSorters;
 import static org.testfx.api.FxAssert.verifyThat;
-import org.testfx.api.FxRobot;
-import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 import static org.testfx.matcher.base.NodeMatchers.isDisabled;
 import static org.testfx.matcher.base.NodeMatchers.isEnabled;
 import static org.testfx.matcher.base.NodeMatchers.isFocused;
-import static org.testfx.matcher.base.NodeMatchers.isInvisible;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
 import static org.testfx.matcher.control.LabeledMatchers.hasText;
 
@@ -101,7 +95,7 @@ public class SignUpControllerIT extends ApplicationTest {
 
     @Test
     public void testA_InitialState() {
-        //clickOn("#hlkHere");
+
         verifyThat("#txtFullName", isEnabled());
         verifyThat("#txtUsername", isEnabled());
         verifyThat("#txtPassword", isEnabled());
@@ -126,11 +120,12 @@ public class SignUpControllerIT extends ApplicationTest {
         write("abcd*1234");
         clickOn("#btnRegister");
         verifyThat("User added correctly", isVisible());
+
     }
 
     @Test
     public void testC_SignUpErrorServer() {
-        clickOn("Aceptar");
+        press(KeyCode.ENTER).release(KeyCode.ENTER);
         cleanAll();
         clickOn(txtFullName);
         write("Aitor Ruiz De Gauna");
@@ -149,7 +144,7 @@ public class SignUpControllerIT extends ApplicationTest {
 
     @Test
     public void testD_SignUpErrorUser() {
-        clickOn("Aceptar");
+        press(KeyCode.ENTER).release(KeyCode.ENTER);
         cleanAll();
         clickOn(txtFullName);
         write("Alain Lozano");
@@ -163,13 +158,12 @@ public class SignUpControllerIT extends ApplicationTest {
         write("abcd*1234");
         clickOn("#btnRegister");
         verifyThat("The user already exist.", isVisible());
-        clickOn("Aceptar");
+
     }
 
-
-    /*
     @Test
     public void testE_TextLongerThan255() {
+        press(KeyCode.ENTER).release(KeyCode.ENTER);
         cleanAll();
         textLongerThan255(txtFullName, lblFullNameError);
         textLongerThan255(txtUsername, lblUsernameError);
@@ -183,13 +177,12 @@ public class SignUpControllerIT extends ApplicationTest {
         write(OVERSIZED_TEXT);
         verifyThat("#btnRegister", isDisabled());
         verifyThat(lbl, isEnabled());
-        verifyThat(lbl, hasText("The field is too long (255 character max)."));       
+        verifyThat(lbl, hasText("The field is too long (255 character max)."));
         doubleClickOn(txt);
         eraseText(1);
 
     }
-     */
-    
+
     @Test
     public void testF_BlankSpacesError() {
         cleanAll();
@@ -211,7 +204,6 @@ public class SignUpControllerIT extends ApplicationTest {
 
     }
 
-    
     @Test
     public void testH_EmptyField() {
         clickOn("#btnRegister");
@@ -222,7 +214,6 @@ public class SignUpControllerIT extends ApplicationTest {
 
     }
 
-    
     @Test
     public void testI_PasswordCorrect() {
         clickOn(txtFullName);
@@ -236,11 +227,9 @@ public class SignUpControllerIT extends ApplicationTest {
         clickOn(txtRepeatPassword);
         write("BBB");
         clickOn("#btnRegister");
-        //verifyThat(lblPasswordError, hasText("The passwords don´t macht."));
-        //verifyThat(lblRepeatPasswordError, hasText("The passwords don´t macht."));
+        verifyThat(lblPasswordError, hasText("The passwords don´t match."));
+        verifyThat(lblRepeatPasswordError, hasText("The passwords don´t match."));
         verifyThat(txtPassword, isFocused());
-        //verifyThat("Insert the password");
-        verifyThat("Insert the password again", isVisible());
 
     }
 

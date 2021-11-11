@@ -132,11 +132,6 @@ public class SignUpController {
         lblRepeatPasswordError.setVisible(false);
         lblUsernameError.setVisible(false);
 
-        lblFullNameError.setText("");
-        lblUsernameError.setText("");
-        lblMailError.setText("");
-        lblPasswordError.setText("");
-        lblRepeatPasswordError.setText("");
 
         SignableFactory signableFactory = new SignableFactory();
         try {
@@ -372,35 +367,32 @@ public class SignUpController {
                 signable.signUp(user);
                 Alert alertUserAddedCorrectly = new Alert(AlertType.INFORMATION);
                 alertUserAddedCorrectly.setTitle("SIGN UP");
-                alertUserAddedCorrectly.setContentText("User added correctly");
+                alertUserAddedCorrectly.setHeaderText("User added correctly");
                 alertUserAddedCorrectly.showAndWait();
 
                 getStage().close();
                 openSignInWindow(user);
 
-            } catch (RepeatPasswordException ex) {
-                //errorLabel(lblPassword2Error, ex);
+            } catch (RepeatPasswordException ex) {               
                 errorLabel(lblPasswordError, ex);
                 errorLabel(lblRepeatPasswordError, ex);
-                txtPassword.setText("");
-                txtRepeatPassword.setText("");
                 txtPassword.requestFocus();
             } catch (ExistUserException ex) {
                 Alert alertUserAlreadyExists = new Alert(AlertType.INFORMATION);
                 alertUserAlreadyExists.setTitle("SIGN UP");
-                alertUserAlreadyExists.setContentText(ex.getMessage());
+                alertUserAlreadyExists.setHeaderText(ex.getMessage());
                 alertUserAlreadyExists.show();
                 logger.severe(ex.getMessage());
             } catch (ConnectionErrorException ex) {
                 Alert alertConnectionError = new Alert(AlertType.INFORMATION);
                 alertConnectionError.setTitle("SIGN UP");
-                alertConnectionError.setContentText(ex.getMessage());
+                alertConnectionError.setHeaderText(ex.getMessage());
                 alertConnectionError.show();
                 logger.severe(ex.getMessage());
             } catch (Exception ex) {
                 Alert alertConnectionError = new Alert(AlertType.INFORMATION);
                 alertConnectionError.setTitle("SIGN UP");
-                alertConnectionError.setContentText(ex.getMessage());
+                alertConnectionError.setHeaderText(ex.getMessage());
                 alertConnectionError.show();
                 logger.severe(ex.getMessage());
             }
