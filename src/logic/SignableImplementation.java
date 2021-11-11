@@ -18,8 +18,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * This class is for getting the connection between the server and the client,
@@ -30,7 +28,7 @@ import java.util.logging.Logger;
  * @author Alain Lozano, Ilia Consuegra
  */
 public class SignableImplementation implements Signable {
-
+    //The parameters for the socket are taken from the configuration file
     private final static int PORT = Integer.valueOf(ResourceBundle.getBundle("dataModel.ClientConfiguration").getString("Port"));
     private final static String IP = ResourceBundle.getBundle("dataModel.ClientConfiguration").getString("ServerHost");
 
@@ -53,6 +51,7 @@ public class SignableImplementation implements Signable {
     public User signIn(User user) throws UserNotExistException, IncorrectPasswordException, ConnectionErrorException {
         Socket sc = null;
         try {
+            //The dataEncapsulation object is sent to the server application
             sc = new Socket(IP, PORT);
             ObjectOutputStream oos = null;
             oos = new ObjectOutputStream(sc.getOutputStream());
@@ -61,6 +60,7 @@ public class SignableImplementation implements Signable {
             data.setMessage(MessageEnum.SIGN_IN);
             oos.writeObject(data);
 
+            //The dataEncapsulation object is received from the server 
             ObjectInputStream ois = null;
             ois = new ObjectInputStream(sc.getInputStream());
             data = (DataEncapsulation) ois.readObject();
@@ -69,6 +69,7 @@ public class SignableImplementation implements Signable {
             oos.close();
             ois.close();
             sc.close();
+            //The message are analyzed to throw the exceptions
             switch (data.getMessage()) {
                 case SIGN_IN_OK:
                     return user;
@@ -105,6 +106,7 @@ public class SignableImplementation implements Signable {
     public void signUp(User user) throws ExistUserException, ConnectionErrorException {
         Socket sc;
         try {
+            //The dataEncapsulation object is sent to the server application
             sc = new Socket(IP, PORT);
             ObjectOutputStream oos = null;
             oos = new ObjectOutputStream(sc.getOutputStream());
@@ -113,6 +115,7 @@ public class SignableImplementation implements Signable {
             data.setMessage(MessageEnum.SIGN_UP);
             oos.writeObject(data);
 
+            //The dataEncapsulation object is received from the server 
             ObjectInputStream ois = null;
             ois = new ObjectInputStream(sc.getInputStream());
             data = (DataEncapsulation) ois.readObject();
@@ -120,6 +123,7 @@ public class SignableImplementation implements Signable {
             oos.close();
             ois.close();
             sc.close();
+            //The message are analyzed to throw the exceptions
             switch (data.getMessage()) {
                 case SIGN_UP_OK:
                     break;

@@ -15,7 +15,7 @@ import view.SignInWindowController;
 public class ClientApplication extends Application {
 
     /**
-     * Method that start the first window(Sign In Window)
+     * Method that starts the first window(Sign In Window)
      * @param primaryStage The stage for the window
      * @throws Exception Throws the exception in case the window doesnt load
      */
@@ -35,7 +35,7 @@ public class ClientApplication extends Application {
     }
 
     /**
-     * Our main method of the client application
+     * Main method of the client application
      * @param args
      */
     public static void main(String[] args) {
