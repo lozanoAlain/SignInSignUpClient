@@ -63,6 +63,7 @@ public class SignInWindowController {
     private static final Logger logger = Logger.getLogger("package.class");
 
     //Getters and Setters
+    
     /**
      * Gets the stage.
      *
@@ -90,10 +91,13 @@ public class SignInWindowController {
         //The login button (btnLogin) is enabled.
         //The username (txtUsername) and password (txtPassword) fields are enabled.
         //The here hyperlink (hlkHere) is enabled.
+
+        //Initializes the stage
         Scene scene = new Scene(root);
         stage.setScene(scene);
 
         Logger.getLogger(SignInWindowController.class.getName()).log(Level.INFO, "Initializing stage.");
+
         //The window title
         stage.setTitle("Sign In Window");
 
@@ -103,15 +107,17 @@ public class SignInWindowController {
         //The username (txtUsername) field is focused.
         stage.setOnShowing(this::handleOnWindow);
 
+        //Setting text change listeners to the different text fields.
         txtUsername.textProperty().addListener(this::txtUsernameChanged255);
         txtUsername.textProperty().addListener(this::txtUsernameEmpty);
         txtPassword.textProperty().addListener(this::txtPasswordChanged255);
         txtPassword.textProperty().addListener(this::txtPasswordEmpty);
+
         //The error labels (lblUsernameError and lblPasswordError) are not visible.
         lblPasswordError.setVisible(false);
         lblUsernameError.setVisible(false);
 
-        //some tooltips to help the user
+        //Some tooltips to help the user
         btnLogin.setTooltip(new Tooltip("Click to log in"));
         hlkHere.setTooltip(new Tooltip("Click to go to the Sign up window and register"));
 
@@ -124,7 +130,7 @@ public class SignInWindowController {
 
         //Shows stage
         stage.show();
-        
+
         Logger.getLogger(SignInWindowController.class.getName()).log(Level.INFO, "Showing stage");
     }
 
@@ -134,17 +140,20 @@ public class SignInWindowController {
      * (FieldTooLongException), an error label (lblUsernameError) is shown.
      *
      * @param observable
-     * @param oldValue
-     * @param newValue
+     * @param oldValue The old value of the text field
+     * @param newValue The new value of the text field
      */
     private void txtUsernameChanged255(ObservableValue observable, String oldValue, String newValue) {
         try {
             if (!newValue.equalsIgnoreCase(oldValue)) {
+                //Calls the method that check the length
                 checkNoLonger255(txtUsername, lblUsernameError);
             }
         } catch (FieldTooLongException ex) {
-            //The error label is shown
+            //The login button is disabled
             btnLogin.setDisable(true);
+
+            //The error label is shown
             lblUsernameError.setVisible(true);
             errorLabel(lblUsernameError, ex);
             logger.warning(ex.getMessage());
@@ -152,10 +161,13 @@ public class SignInWindowController {
     }
 
     /**
-     * 
+     * Check that the Username field (txtUsername) or Password field
+     * (txtPassword) fields are not empty checkEmptyFields(txtUsername,
+     * lblUsernameError);
+     *
      * @param observable
-     * @param oldValue
-     * @param newValue
+     * @param oldValue The old value of the text field
+     * @param newValue The new value of the text field
      */
     private void txtUsernameEmpty(ObservableValue observable, String oldValue, String newValue) {
         if (!newValue.equalsIgnoreCase(oldValue)) {
@@ -168,8 +180,8 @@ public class SignInWindowController {
      * characters (checkNoLonger255()).
      *
      * @param observable
-     * @param oldValue
-     * @param newValue
+     * @param oldValue The old value of the text field
+     * @param newValue The new value of the text field
      */
     private void txtPasswordChanged255(ObservableValue observable, String oldValue, String newValue) {
         try {
@@ -186,10 +198,12 @@ public class SignInWindowController {
     }
 
     /**
+     * Check that the Password field (txtPassword) is not empty
+     * (checkEmptyFields(txt,lbl)).
      *
      * @param observable
-     * @param oldValue
-     * @param newValue
+     * @param oldValue The old value of the text field
+     * @param newValue The new value of the text field
      */
     private void txtPasswordEmpty(ObservableValue observable, String oldValue, String newValue) {
 
@@ -273,15 +287,16 @@ public class SignInWindowController {
     }
 
     /**
-     * It comes after having pressed the Register button, in the Sign up Window
+     * The username (txtUsername) and password (txtPassword) fields are
+     * completed with the information brought it from the Sign Up window.
      *
+     * @param user The user
      */
     public void initWhenSignUp(User user) {
-        //Creates a new user object
-        
         //Fields are completed with the information brought in from the Sign Up window.
         txtUsername.setText(user.getLogin());
         txtPassword.setText(user.getPassword());
+
         //The login button (btnLogin) is focused.
         stage.setOnShowing(this::handleOnWindowSignUp);
     }
@@ -305,6 +320,7 @@ public class SignInWindowController {
             lblError.setVisible(true);
             throw new FieldTooLongException();
         } else {
+            //An error label is hidden.
             lblError.setVisible(false);
         }
     }
@@ -386,6 +402,11 @@ public class SignInWindowController {
         btnLogin.isFocused();
     }
 
+    /**
+     * Opens the welcome window sending a user to greet the user that logged in.
+     *
+     * @param user
+     */
     private void openWelcomeWindow(User user) {
         try {
             //Opens the Welcome window
@@ -405,6 +426,12 @@ public class SignInWindowController {
         }
     }
 
+    /**
+     * The method that put the label Visible with the error message in red
+     *
+     * @param lbl The label that is shown
+     * @param ex The error of the exception
+     */
     private void errorLabel(Label lbl, Exception ex) {
         lbl.setVisible(true);
         lbl.setText(ex.getMessage());
@@ -412,11 +439,13 @@ public class SignInWindowController {
     }
 
     /*
-   Check that the Username field (txtUsername) or Password field
-     * (txtPassword) fields are not empty checkIsNotEmpty(TextField, Label). If
+     *  Check that the Username field (txtUsername) or Password field
+     * (txtPassword) fields are not empty. If
      * the fields are empty (EmptyFieldsException), an error label
      * (lblUsernameError) and (lblPasswordError) is shown
-     *  */
+     *
+     * @return check
+     */
     private boolean checkEmptyFields(TextField txt, Label lbl) {
         boolean check = false;
         if (txt.getText().trim().isEmpty()) {

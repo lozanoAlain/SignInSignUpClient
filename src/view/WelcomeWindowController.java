@@ -15,11 +15,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
- * FXML Controller class
+ * FXML Controller class for the welome window
  *
  * @author Matteo Fernández
  */
@@ -36,6 +35,7 @@ public class WelcomeWindowController {
 
     @FXML
     private Label txtWelcome;
+
     private User user;
 
     //Getters and Setters
@@ -63,12 +63,12 @@ public class WelcomeWindowController {
     }
 
     /**
-     * Initializes the window
+     * Initializes the Sign in window
      *
      * @param root
      * @param user
      */
-    public void initStage(Parent root,User user) {
+    public void initStage(Parent root, User user) {
         //Exit button (btnExit) and Log out button (btnLogOut) are enabled.
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -94,7 +94,9 @@ public class WelcomeWindowController {
     }
 
     /**
-     * The welcome window (WelcomeWindow) is closed.
+     * The welcome window (WelcomeWindow) is closed. This handles the event of
+     * the exit button. Shows an alert to the user and verifies that they want
+     * to exit or not.
      *
      * @param event
      * @throws IOException
@@ -120,13 +122,14 @@ public class WelcomeWindowController {
 
     /**
      * The welcome window (WelcomeWindow) is closed and returns to the Sign In
-     * window (SignInWindow).
+     * window (SignInWindow). Handles de Log Out button.
      *
      * @param event
      * @throws IOException
      */
     @FXML
     public void handleBtnLogOutPressed(ActionEvent event) throws IOException {
+        //Shows an alert to the user and verifies that they want to exit or not.
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText("Confirmation");
         alert.setContentText("Are you sure you want to log out of the app?");
@@ -147,7 +150,4 @@ public class WelcomeWindowController {
             signInWindowController.initStage(root);
         }
     }
-
-    
-
 }

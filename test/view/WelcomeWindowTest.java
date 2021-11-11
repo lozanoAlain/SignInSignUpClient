@@ -51,7 +51,7 @@ public class WelcomeWindowTest extends ApplicationTest {
      * Veryfy that when the window opens, the txtWelcome has the greeting.
      */
     @Test
-    public void testB_logOutStage() {
+    public void testB_greeting() {
 
         verifyThat("#txtWelcome", hasText("Hello matteo"));
     }
