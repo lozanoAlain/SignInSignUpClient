@@ -3,13 +3,12 @@ package view;
 import clientApplication.ClientApplication;
 import javafx.stage.Stage;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.testfx.framework.junit.ApplicationTest;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import static org.testfx.api.FxAssert.verifyThat;
+import static org.testfx.matcher.base.NodeMatchers.isDisabled;
 import static org.testfx.matcher.base.NodeMatchers.isEnabled;
-import static org.testfx.matcher.base.NodeMatchers.isFocused;
 import static org.testfx.matcher.base.NodeMatchers.isInvisible;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
 import org.testfx.matcher.base.WindowMatchers;
@@ -48,7 +47,7 @@ public class SignInWindowTest extends ApplicationTest {
      *
      */
     @Test
-    public void testE_initStage() {
+    public void testAA_initStage() {
         verifyThat("#btnLogin", isEnabled());
         verifyThat("#txtUsername", isEnabled());
         verifyThat("#txtPassword", isEnabled());
@@ -76,6 +75,7 @@ public class SignInWindowTest extends ApplicationTest {
         doubleClickOn("#txtPassword");
         write(OVERSIZED_TEXT);
         verifyThat("#lblPasswordError", hasText("The field is too long (255 character max)."));
+        verifyThat("#btnLogin", isDisabled());
     }
 
     /**
@@ -86,6 +86,7 @@ public class SignInWindowTest extends ApplicationTest {
         doubleClickOn("#txtUsername");
         write(OVERSIZED_TEXT);
         verifyThat("#lblUsernameError", hasText("The field is too long (255 character max)."));
+        verifyThat("#btnLogin", isDisabled());
     }
 
     /**

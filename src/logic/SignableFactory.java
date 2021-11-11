@@ -15,7 +15,7 @@ import dataModel.Signable;
 public class SignableFactory {
 
     /**
-     * Method that get the signable implementation, and returns the initialized
+     * Method that gets the signable implementation, and returns the initialized
      * interface.
      *
      * @return signable the interface

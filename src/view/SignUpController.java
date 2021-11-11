@@ -45,6 +45,7 @@ public class SignUpController {
 
 //Getters and Setters
     /**
+     * Gets the stage
      * @return the stage
      */
     public Stage getStage() {
@@ -52,6 +53,7 @@ public class SignUpController {
     }
 
     /**
+     * Sets the stage
      * @param stage the stage to set
      */
     public void setStage(Stage stage) {
@@ -131,7 +133,6 @@ public class SignUpController {
         lblPasswordError.setVisible(false);
         lblRepeatPasswordError.setVisible(false);
         lblUsernameError.setVisible(false);
-
 
         SignableFactory signableFactory = new SignableFactory();
         try {
@@ -373,7 +374,7 @@ public class SignUpController {
                 getStage().close();
                 openSignInWindow(user);
 
-            } catch (RepeatPasswordException ex) {               
+            } catch (RepeatPasswordException ex) {
                 errorLabel(lblPasswordError, ex);
                 errorLabel(lblRepeatPasswordError, ex);
                 txtPassword.requestFocus();
@@ -405,7 +406,6 @@ public class SignUpController {
      *
      * @param user The user that is send to the Sign In window
      */
-
     private void openSignInWindow(User user) {
         try {
             //Opens the Welcome window
@@ -455,7 +455,8 @@ public class SignUpController {
      */
     /**
      * The method that checks if any of the fields are empty
-     * @return check The boolean to check if there is any empty field 
+     *
+     * @return check The boolean to check if there is any empty field
      */
     private boolean checkEmptyFields() {
         boolean check = false;
@@ -514,23 +515,25 @@ public class SignUpController {
 
     /*
     Validate that the password entered in the Repeat Password field (txtRepeatPassword) is the same as the one entered in the Password field (txtPassword).
-    If it is not the same (RepeatPasswordException()), an error label (lblRepeatPasswordError) is shown and the two password fields are deleted.
+    If it is not the same (RepeatPasswordException()), an error label (lblRepeatPasswordError) is shown.
      */
     /**
-     *  Method that checks if the password fields match
-     * @throws RepeatPasswordException Is thrown in case the passwords do not match 
+     * Method that checks if the password fields match
+     *
+     * @throws RepeatPasswordException Is thrown in case the passwords do not
+     * match
      */
     private void checkPasswords() throws RepeatPasswordException {
         if (!new String(txtPassword.getText()).trim().equals(new String(txtRepeatPassword.getText()).trim())) {
             throw new RepeatPasswordException();
         }
     }
-    
+
     /**
      * The method that gets all the user information from the fields
+     *
      * @return user The user that is collected
      */
-
     private User addUser() {
 
         User user = new User();
