@@ -48,11 +48,10 @@ public class SignInWindowTest extends ApplicationTest {
      *
      */
     @Test
-    public void testA_initStage() {
+    public void testE_initStage() {
         verifyThat("#btnLogin", isEnabled());
         verifyThat("#txtUsername", isEnabled());
         verifyThat("#txtPassword", isEnabled());
-        verifyThat("#txtUsername", isFocused());
         verifyThat("#hlkHere", isEnabled());
         verifyThat("#lblUsernameError", isInvisible());
         verifyThat("#lblPasswordError", isInvisible());
@@ -63,7 +62,7 @@ public class SignInWindowTest extends ApplicationTest {
      *
      */
     @Test
-    public void testB_HyperlinkHlkHere() {
+    public void testX_HyperlinkHlkHere() {
         clickOn("#hlkHere");
         verifyThat(window("Sign Up Window"), WindowMatchers.isShowing());
         clickOn("#btnBack");
@@ -72,21 +71,18 @@ public class SignInWindowTest extends ApplicationTest {
     /**
      * Test what happens when the password is too long
      */
-   
     @Test
-    public void testC_PasswordTooLong() {
+    public void testV_PasswordTooLong() {
         doubleClickOn("#txtPassword");
         write(OVERSIZED_TEXT);
-        verifyThat("#lblPasswordError", isVisible());
         verifyThat("#lblPasswordError", hasText("The field is too long (255 character max)."));
     }
 
     /**
      * Test what happens when the user is too long
      */
-
     @Test
-    public void testD_UserTooLong() {
+    public void testN_UserTooLong() {
         doubleClickOn("#txtUsername");
         write(OVERSIZED_TEXT);
         verifyThat("#lblUsernameError", hasText("The field is too long (255 character max)."));
@@ -95,25 +91,22 @@ public class SignInWindowTest extends ApplicationTest {
     /**
      * Test what happens when the user is empty
      */
-
     @Test
-    public void testE_UserIsEmpty() {
+    public void testM_UserIsEmpty() {
         doubleClickOn("#txtUsername");
         write("matteo");
         doubleClickOn("#txtUsername");
-        write("");
+        write(" ");
         verifyThat("#lblUsernameError", hasText("The field cannot be empty."));
     }
 
     /**
      * Test what happens when the password is empty
      */
-
     @Test
     public void testF_PasswordIsEmpty() {
         doubleClickOn("#txtPassword");
-        write("aaa");
-        write("");
+        write(" ");
         verifyThat("#lblPasswordError", hasText("The field cannot be empty."));
     }
 
@@ -121,7 +114,7 @@ public class SignInWindowTest extends ApplicationTest {
      * Test what happens when the user exist
      */
     @Test
-    public void testG_UserExist() {
+    public void testA_UserExist() {
         doubleClickOn("#txtUsername");
         write("matteo");
         doubleClickOn("#txtPassword");
@@ -129,32 +122,50 @@ public class SignInWindowTest extends ApplicationTest {
         clickOn("#btnLogin");
         verifyThat(window("Welcome window"), WindowMatchers.isShowing());
         clickOn("#btnLogOut");
+        clickOn("Aceptar");
     }
 
     /**
      * Test what happens when the user does not exit
      */
-    
     @Test
-    public void testH_UserNotExist() {
+    public void testB_UserNotExist() {
         doubleClickOn("#txtUsername");
         write("matteosss");
         doubleClickOn("#txtPassword");
         write("abcd*1234");
         clickOn("#btnLogin");
         verifyThat("The user does not exist.", isVisible());
+        clickOn("Aceptar");
     }
 
     /**
      * Test what happens when the password does not match.
      */
     @Test
-    public void testI_PasswordDoesNotMatch() {
+    public void testC_PasswordDoesNotMatch() {
         doubleClickOn("#txtUsername");
         write("matteo");
         doubleClickOn("#txtPassword");
         write("abcd");
         clickOn("#btnLogin");
         verifyThat("The password is incorrect.", isVisible());
+        clickOn("Aceptar");
+    }
+
+    /**
+     * Test what happens when the server is off and the conexion doesnt work
+     * 
+     */
+    //TEST ONLY WITHPUT THE SERVER RUNNING
+    @Test
+    public void testD_Connection_Error() {
+        doubleClickOn("#txtUsername");
+        write("matteo");
+        doubleClickOn("#txtPassword");
+        write("abcd*1234");
+        clickOn("#btnLogin");
+        verifyThat("It was implossible to connect to the server.", isVisible());
+        clickOn("Aceptar");
     }
 }
