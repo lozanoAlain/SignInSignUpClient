@@ -46,6 +46,7 @@ public class SignUpController {
 //Getters and Setters
     /**
      * Gets the stage
+     *
      * @return the stage
      */
     public Stage getStage() {
@@ -54,6 +55,7 @@ public class SignUpController {
 
     /**
      * Sets the stage
+     *
      * @param stage the stage to set
      */
     public void setStage(Stage stage) {
@@ -120,19 +122,12 @@ public class SignUpController {
 
         stage.setOnShowing(this::handleWindowShowing);
         txtFullName.textProperty().addListener(this::fullNameTextChanged);
-        txtFullName.focusedProperty().addListener(this::fullNameFocusChanged);
         txtUsername.textProperty().addListener(this::usernameTextChanged);
         txtMail.textProperty().addListener(this::mailTextChanged);
         txtPassword.textProperty().addListener(this::passwordTextChanged);
         txtRepeatPassword.textProperty().addListener(this::repeatPasswordTextChanged);
         btnBack.setOnAction(this::handleButtonBack);
         btnRegister.setOnAction(this::handleButtonRegister);
-
-        lblFullNameError.setVisible(false);
-        lblMailError.setVisible(false);
-        lblPasswordError.setVisible(false);
-        lblRepeatPasswordError.setVisible(false);
-        lblUsernameError.setVisible(false);
 
         SignableFactory signableFactory = new SignableFactory();
         try {
@@ -141,7 +136,7 @@ public class SignUpController {
             logger.severe(ex.getMessage());
         }
 
-        getStage().show();
+        getStage().showAndWait();
 
     }
 
@@ -153,6 +148,12 @@ public class SignUpController {
      */
     private void handleWindowShowing(WindowEvent event) {
         txtFullName.requestFocus();
+
+        lblFullNameError.setVisible(false);
+        lblMailError.setVisible(false);
+        lblPasswordError.setVisible(false);
+        lblRepeatPasswordError.setVisible(false);
+        lblUsernameError.setVisible(false);
 
     }
 
@@ -191,20 +192,6 @@ public class SignUpController {
      * @param oldValue The old value of the text field
      * @param newValue The new value of the text field
      */
-    private void fullNameFocusChanged(ObservableValue observable, Boolean oldValue, Boolean newValue) {
-
-        if (newValue) {
-            logger.info("onFocus");
-        } else if (oldValue) {
-            try {
-                logger.info("onBlur");
-                checkWhiteSpace(txtFullName.getText(), lblFullNameError);
-            } catch (FullNameException ex) {
-                errorLabel(lblFullNameError, ex);
-            }
-        }
-    }
-
     /*
     Check that the Username field (txtUsername) is no longer than 255 characters (checkNoLonger255()).
     If it is not correct (FieldTooLongException()), an error label (lblUsernameError) is shown and the register button(btnRegister is disabled.
@@ -361,42 +348,87 @@ public class SignUpController {
      * @param event the event that manages the Register button
      */
     private void handleButtonRegister(ActionEvent event) {
-        if (!checkEmptyFields()) {
+
+        try {
+            /*
+                Check that the Full Name field (txtFullName), Username field (txtUsername), Mail field (txtMail), Password field (txtPassword) and Repeat Password field (txtRepeatPassword) fields are not empty.
+                If they are empty (EmptyFieldException()), an error label is shown for each field (lblFullNameError, lblUsernameError, lblMailError, lblPasswordError, lblRepeatPasswordError).
+             */
             try {
-                checkPasswords();
-                User user = addUser();
-                signable.signUp(user);
-                Alert alertUserAddedCorrectly = new Alert(AlertType.INFORMATION);
-                alertUserAddedCorrectly.setTitle("SIGN UP");
-                alertUserAddedCorrectly.setHeaderText("User added correctly");
-                alertUserAddedCorrectly.showAndWait();
-
-                getStage().close();
-                openSignInWindow(user);
-
-            } catch (RepeatPasswordException ex) {
-                errorLabel(lblPasswordError, ex);
-                errorLabel(lblRepeatPasswordError, ex);
-                txtPassword.requestFocus();
-            } catch (ExistUserException ex) {
-                Alert alertUserAlreadyExists = new Alert(AlertType.INFORMATION);
-                alertUserAlreadyExists.setTitle("SIGN UP");
-                alertUserAlreadyExists.setHeaderText(ex.getMessage());
-                alertUserAlreadyExists.show();
-                logger.severe(ex.getMessage());
-            } catch (ConnectionErrorException ex) {
-                Alert alertConnectionError = new Alert(AlertType.INFORMATION);
-                alertConnectionError.setTitle("SIGN UP");
-                alertConnectionError.setHeaderText(ex.getMessage());
-                alertConnectionError.show();
-                logger.severe(ex.getMessage());
-            } catch (Exception ex) {
-                Alert alertConnectionError = new Alert(AlertType.INFORMATION);
-                alertConnectionError.setTitle("SIGN UP");
-                alertConnectionError.setHeaderText(ex.getMessage());
-                alertConnectionError.show();
-                logger.severe(ex.getMessage());
+                if (txtFullName.getText().trim().isEmpty()) {
+                    txtFullName.requestFocus();
+                    throw new EmptyFieldsException();
+                }
+            } catch (EmptyFieldsException ex) {
+                errorLabel(lblFullNameError, ex);
+                throw new EmptyFieldsException();
             }
+            try {
+                if (txtUsername.getText().trim().isEmpty()) {
+                    txtUsername.requestFocus();
+                    throw new EmptyFieldsException();
+                }
+            } catch (EmptyFieldsException ex) {
+                errorLabel(lblUsernameError, ex);
+                throw new EmptyFieldsException();
+            }
+            try {
+                if (txtMail.getText().trim().isEmpty()) {
+                    txtMail.requestFocus();
+                    throw new EmptyFieldsException();
+                }
+            } catch (EmptyFieldsException ex) {
+                errorLabel(lblMailError, ex);
+                throw new EmptyFieldsException();
+            }
+            try {
+                if (txtPassword.getText().trim().isEmpty()) {
+                    txtPassword.requestFocus();
+                    throw new EmptyFieldsException();
+                }
+            } catch (EmptyFieldsException ex) {
+                errorLabel(lblPasswordError, ex);
+                throw new EmptyFieldsException();
+            }
+            try {
+                if (txtRepeatPassword.getText().trim().isEmpty()) {
+                    txtRepeatPassword.requestFocus();
+                    throw new EmptyFieldsException();
+                }
+            } catch (EmptyFieldsException ex) {
+                errorLabel(lblRepeatPasswordError, ex);
+                throw new EmptyFieldsException();
+            }
+
+            //Check that the full name has at least 1 blank
+            checkWhiteSpace(txtFullName.getText(), lblFullNameError);
+            //Check that the two passwords match
+            checkPasswords();
+
+            //If there are any exceptions the user is added
+            User user = addUser();
+            signable.signUp(user);
+            Alert alertUserAddedCorrectly = new Alert(AlertType.INFORMATION);
+            alertUserAddedCorrectly.setTitle("SIGN UP");
+            alertUserAddedCorrectly.setHeaderText("User added correctly");
+            alertUserAddedCorrectly.showAndWait();
+
+            getStage().close();
+            openSignInWindow(user);
+
+        } catch (EmptyFieldsException ex) {
+            logger.severe(ex.getMessage());
+        } catch (FullNameException ex) {
+            errorLabel(lblFullNameError, ex);
+            txtFullName.requestFocus();
+        } catch (RepeatPasswordException ex) {
+            errorLabel(lblPasswordError, ex);
+            errorLabel(lblRepeatPasswordError, ex);
+            txtPassword.requestFocus();
+        } catch (ExistUserException | ConnectionErrorException ex) {
+            alertExceptionMethod(ex);
+        } catch (Exception ex) {
+            alertExceptionMethod(ex);
         }
 
     }
@@ -436,12 +468,14 @@ public class SignUpController {
     private void handleButtonBack(ActionEvent event) {
         try {
             getStage().close();
+            /*
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignInWindow.fxml"));
             Parent root = (Parent) loader.load();
 
             SignInWindowController controller = (SignInWindowController) loader.getController();
             controller.setStage(stage);
             controller.initStage(root);
+            */
 
         } catch (Exception ex) {
             lblFullNameError.setText(ex.getMessage());
@@ -449,69 +483,6 @@ public class SignUpController {
         }
     }
 
-    /*
-    Check that the Full Name field (txtFullName), Username field (txtUsername), Mail field (txtMail), Password field (txtPassword) and Repeat Password field (txtRepeatPassword) fields are not empty.
-    If they are empty (EmptyFieldException()), an error label is shown for each field (lblFullNameError, lblUsernameError, lblMailError, lblPasswordError, lblRepeatPasswordError).
-     */
-    /**
-     * The method that checks if any of the fields are empty
-     *
-     * @return check The boolean to check if there is any empty field
-     */
-    private boolean checkEmptyFields() {
-        boolean check = false;
-        if (new String(txtRepeatPassword.getText()).isEmpty()) {
-            try {
-                check = true;
-                txtRepeatPassword.requestFocus();
-                throw new EmptyFieldsException();
-            } catch (EmptyFieldsException ex) {
-                errorLabel(lblRepeatPasswordError, ex);
-                logger.severe(ex.getMessage());
-            }
-        }
-        if (new String(txtPassword.getText()).isEmpty()) {
-            try {
-                check = true;
-                txtPassword.requestFocus();
-                throw new EmptyFieldsException();
-            } catch (EmptyFieldsException ex) {
-                errorLabel(lblPasswordError, ex);
-                logger.severe(ex.getMessage());
-            }
-        }
-        if (txtMail.getText().isEmpty()) {
-            try {
-                check = true;
-                txtMail.requestFocus();
-                throw new EmptyFieldsException();
-            } catch (EmptyFieldsException ex) {
-                errorLabel(lblMailError, ex);
-                logger.severe(ex.getMessage());
-            }
-        }
-        if (txtUsername.getText().isEmpty()) {
-            try {
-                check = true;
-                txtUsername.requestFocus();
-                throw new EmptyFieldsException();
-            } catch (EmptyFieldsException ex) {
-                errorLabel(lblUsernameError, ex);
-                logger.severe(ex.getMessage());
-            }
-        }
-        if (txtFullName.getText().isEmpty()) {
-            try {
-                check = true;
-                txtFullName.requestFocus();
-                throw new EmptyFieldsException();
-            } catch (EmptyFieldsException ex) {
-                errorLabel(lblFullNameError, ex);
-                logger.severe(ex.getMessage());
-            }
-        }
-        return check;
-    }
 
     /*
     Validate that the password entered in the Repeat Password field (txtRepeatPassword) is the same as the one entered in the Password field (txtPassword).
@@ -542,6 +513,14 @@ public class SignUpController {
         user.setEmail(txtMail.getText());
         user.setPassword(new String(txtPassword.getText()));
         return user;
+    }
+
+    private void alertExceptionMethod(Exception ex) {
+        Alert alertUserAlreadyExists = new Alert(AlertType.INFORMATION);
+        alertUserAlreadyExists.setTitle("SIGN UP");
+        alertUserAlreadyExists.setHeaderText(ex.getMessage());
+        alertUserAlreadyExists.show();
+        logger.severe(ex.getMessage());
     }
 
 }

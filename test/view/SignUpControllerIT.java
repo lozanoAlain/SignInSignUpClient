@@ -72,6 +72,7 @@ public class SignUpControllerIT extends ApplicationTest {
         //Set the stage that we already created to the sign up controller
         signUpController.setStage(stage);
         signUpController.initStage(root);
+        
     }
 
     @Before
@@ -188,8 +189,7 @@ public class SignUpControllerIT extends ApplicationTest {
         cleanAll();
         clickOn(txtFullName);
         write("AAA");
-        clickOn(txtUsername);
-        verifyThat("#btnRegister", isDisabled());
+        clickOn("#btnRegister");
         verifyThat(lblFullNameError, hasText("The full name is incomplete."));
     }
 
@@ -198,33 +198,53 @@ public class SignUpControllerIT extends ApplicationTest {
         doubleClickOn(txtFullName);
         eraseText(1);
         write("AA A");
-        clickOn(txtUsername);
-        verifyThat("#btnRegister", isEnabled());
+        clickOn("#btnRegister");
         verifyThat(lblFullNameError, hasText(""));
 
     }
 
     @Test
-    public void testH_EmptyField() {
+    public void testH_FullNameEmptyField() {
+        doubleClickOn(txtFullName);
+        eraseText(1);
+        clickOn("#btnRegister");
+        verifyThat(lblFullNameError, hasText("The field cannot be empty."));
+        write("AA A");  
+
+    }
+    
+    @Test
+    public void testI_UserNameEmptyField(){
         clickOn("#btnRegister");
         verifyThat(lblUsernameError, hasText("The field cannot be empty."));
+        write("AA");
+    }
+    
+    @Test
+    public void testJ_MailEmptyField(){
+        clickOn("#btnRegister");
         verifyThat(lblMailError, hasText("The field cannot be empty."));
+        write("AA");
+    }
+    
+    @Test
+    public void testK_UsPasswordEmptyField(){
+        clickOn("#btnRegister");
         verifyThat(lblPasswordError, hasText("The field cannot be empty."));
+        write("AA");
+    }
+    
+    @Test
+    public void testM_RepeatPasswordEmptyField(){
+        clickOn("#btnRegister");
         verifyThat(lblRepeatPasswordError, hasText("The field cannot be empty."));
-
+        write("AA");
     }
 
     @Test
-    public void testI_PasswordCorrect() {
-        clickOn(txtFullName);
-        write("AA A");
-        clickOn(txtUsername);
-        write("AAA");
-        clickOn(txtMail);
-        write("AAA");
-        clickOn(txtPassword);
-        write("AAA");
-        clickOn(txtRepeatPassword);
+    public void testN_PasswordCorrect() {
+        doubleClickOn(txtRepeatPassword);
+        eraseText(1);
         write("BBB");
         clickOn("#btnRegister");
         verifyThat(lblPasswordError, hasText("The passwords don´t match."));
