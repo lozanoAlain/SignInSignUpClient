@@ -12,10 +12,13 @@ import exceptions.EmptyFieldsException;
 import exceptions.ExistUserException;
 import exceptions.FieldTooLongException;
 import exceptions.FullNameException;
+import exceptions.MailErrorException;
 import exceptions.RepeatPasswordException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -46,6 +49,7 @@ public class SignUpController {
 //Getters and Setters
     /**
      * Gets the stage
+     *
      * @return the stage
      */
     public Stage getStage() {
@@ -54,6 +58,7 @@ public class SignUpController {
 
     /**
      * Sets the stage
+     *
      * @param stage the stage to set
      */
     public void setStage(Stage stage) {
@@ -118,7 +123,6 @@ public class SignUpController {
         getStage().setTitle("Sign Up Window");
         getStage().setResizable(false);
 
-        stage.setOnShowing(this::handleWindowShowing);
         txtFullName.textProperty().addListener(this::fullNameTextChanged);
         txtFullName.focusedProperty().addListener(this::fullNameFocusChanged);
         txtUsername.textProperty().addListener(this::usernameTextChanged);
@@ -142,16 +146,6 @@ public class SignUpController {
         }
 
         getStage().show();
-
-    }
-
-    // The Full name field (txtFullName) is focused.
-    /**
-     * Method that focus the text field txtFullName when the window is opened.
-     *
-     * @param event
-     */
-    private void handleWindowShowing(WindowEvent event) {
         txtFullName.requestFocus();
 
     }
@@ -194,10 +188,9 @@ public class SignUpController {
     private void fullNameFocusChanged(ObservableValue observable, Boolean oldValue, Boolean newValue) {
 
         if (newValue) {
-            logger.info("onFocus");
+
         } else if (oldValue) {
             try {
-                logger.info("onBlur");
                 checkWhiteSpace(txtFullName.getText(), lblFullNameError);
             } catch (FullNameException ex) {
                 errorLabel(lblFullNameError, ex);
@@ -363,7 +356,19 @@ public class SignUpController {
     private void handleButtonRegister(ActionEvent event) {
         if (!checkEmptyFields()) {
             try {
-                checkPasswords();
+                //Check if the passwords match
+                if (!new String(txtPassword.getText()).trim().equals(new String(txtRepeatPassword.getText()).trim())) {
+                    throw new RepeatPasswordException();
+                }
+                //Check the mail is written correctly
+                Pattern pattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+                Matcher matcher = pattern.matcher(txtMail.getText().trim());
+
+                if (!matcher.find()) {
+                    //The email is written incorrectly
+                    throw new MailErrorException();
+                }
+                //The mail is written correctly
                 User user = addUser();
                 signable.signUp(user);
                 Alert alertUserAddedCorrectly = new Alert(AlertType.INFORMATION);
@@ -374,7 +379,9 @@ public class SignUpController {
                 getStage().close();
                 openSignInWindow(user);
 
-            } catch (RepeatPasswordException ex) {
+            }catch(MailErrorException ex){
+                errorLabel(lblMailError, ex);
+            }catch (RepeatPasswordException ex) {
                 errorLabel(lblPasswordError, ex);
                 errorLabel(lblRepeatPasswordError, ex);
                 txtPassword.requestFocus();
@@ -436,12 +443,6 @@ public class SignUpController {
     private void handleButtonBack(ActionEvent event) {
         try {
             getStage().close();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignInWindow.fxml"));
-            Parent root = (Parent) loader.load();
-
-            SignInWindowController controller = (SignInWindowController) loader.getController();
-            controller.setStage(stage);
-            controller.initStage(root);
 
         } catch (Exception ex) {
             lblFullNameError.setText(ex.getMessage());
@@ -511,22 +512,6 @@ public class SignUpController {
             }
         }
         return check;
-    }
-
-    /*
-    Validate that the password entered in the Repeat Password field (txtRepeatPassword) is the same as the one entered in the Password field (txtPassword).
-    If it is not the same (RepeatPasswordException()), an error label (lblRepeatPasswordError) is shown.
-     */
-    /**
-     * Method that checks if the password fields match
-     *
-     * @throws RepeatPasswordException Is thrown in case the passwords do not
-     * match
-     */
-    private void checkPasswords() throws RepeatPasswordException {
-        if (!new String(txtPassword.getText()).trim().equals(new String(txtRepeatPassword.getText()).trim())) {
-            throw new RepeatPasswordException();
-        }
     }
 
     /**

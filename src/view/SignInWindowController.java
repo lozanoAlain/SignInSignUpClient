@@ -259,7 +259,6 @@ public class SignInWindowController {
     @FXML
     public void hlkHerePressed(ActionEvent event) {
         try {
-            stage.close();
             //Opens the Sign Up window
             FXMLLoader loader = new FXMLLoader(getClass().getResource("SignUpWindow.fxml"));
 

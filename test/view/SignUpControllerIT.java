@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.runners.MethodSorters;
 import static org.testfx.api.FxAssert.verifyThat;
 import org.testfx.framework.junit.ApplicationTest;
@@ -185,6 +186,7 @@ public class SignUpControllerIT extends ApplicationTest {
 
     @Test
     public void testF_BlankSpacesError() {
+        press(KeyCode.ENTER).release(KeyCode.ENTER);
         cleanAll();
         clickOn(txtFullName);
         write("AAA");
@@ -206,6 +208,8 @@ public class SignUpControllerIT extends ApplicationTest {
 
     @Test
     public void testH_EmptyField() {
+        clickOn(txtFullName);
+        write("AA A");
         clickOn("#btnRegister");
         verifyThat(lblUsernameError, hasText("The field cannot be empty."));
         verifyThat(lblMailError, hasText("The field cannot be empty."));
@@ -230,6 +234,24 @@ public class SignUpControllerIT extends ApplicationTest {
         verifyThat(lblPasswordError, hasText("The passwords don´t match."));
         verifyThat(lblRepeatPasswordError, hasText("The passwords don´t match."));
         verifyThat(txtPassword, isFocused());
+
+    }
+
+    @Test
+    public void testJ_EmailCorrect() {
+        cleanAll();
+        clickOn(txtFullName);
+        write("AA A");
+        clickOn(txtUsername);
+        write("AAA");
+        clickOn(txtMail);
+        write("AAA");
+        clickOn(txtPassword);
+        write("AAA");
+        clickOn(txtRepeatPassword);
+        write("AAA");
+        clickOn("#btnRegister");
+        verifyThat(lblMailError, hasText("The mail is written incorrectly"));
 
     }
 
