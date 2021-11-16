@@ -23,12 +23,12 @@
                 <AnchorPane fx:id="anchorPane" layoutX="240.0" layoutY="80.0" opacity="0.8" prefHeight="337.0" prefWidth="482.0" stylesheets="@css.css">
                     <children>
                         <TextField fx:id="txtFullName" layoutX="7.0" layoutY="27.0" prefHeight="27.0" prefWidth="346.0" promptText="Insert your full name here" />
-                        <Label layoutX="248.0" layoutY="80.0" prefHeight="38.0" prefWidth="106.0" text="Full name:" textFill="#53635c">
+                        <Label layoutX="7.0" layoutY="-5.0" prefHeight="38.0" prefWidth="106.0" text="Full name:" textFill="#53635c">
                             <font>
                                 <Font size="18.0" />
                             </font>
                          </Label>
-                        <TextField fx:id="txtUsername" layoutX="7.0" layoutY="81.0" prefHeight="27.0" prefWidth="346.0" promptText="Insert your username here" />
+                        <TextField fx:id="txtUsernameUp" layoutX="7.0" layoutY="81.0" prefHeight="27.0" prefWidth="346.0" promptText="Insert your username here" />
                         <Label layoutX="7.0" layoutY="54.0" prefHeight="27.0" prefWidth="106.0" text="Username:" textFill="#53635c">
                             <font>
                                 <Font size="18.0" />
@@ -40,7 +40,7 @@
                                 <Font size="18.0" />
                             </font>
                         </Label>
-                        <PasswordField fx:id="txtPassword" layoutX="7.0" layoutY="189.0" prefHeight="25.0" prefWidth="346.0" promptText="Insert the password" />
+                        <PasswordField fx:id="txtPasswordUp" layoutX="7.0" layoutY="189.0" prefHeight="25.0" prefWidth="346.0" promptText="Insert the password" />
                         <Label layoutX="7.0" layoutY="162.0" prefHeight="27.0" prefWidth="106.0" text="Password:" textFill="#53635c">
                             <font>
                                 <Font size="18.0" />
@@ -62,8 +62,8 @@
                                 <Cursor fx:constant="HAND" />
                             </cursor>
                         </Button>
-                  <Label fx:id="lblFullNameError" layoutX="98.0" layoutY="38.0" prefHeight="18.0" prefWidth="254.0" />
-                  <Label fx:id="lblUsernameError" layoutX="98.0" layoutY="58.0" prefHeight="18.0" prefWidth="254.0" />
+                  <Label fx:id="lblFullNameError" layoutX="91.0" layoutY="5.0" prefHeight="18.0" prefWidth="254.0" />
+                  <Label fx:id="lblUsernameError" layoutX="91.0" layoutY="5.0" prefHeight="18.0" prefWidth="254.0" />
                   <Label fx:id="lblMailError" layoutX="53.0" layoutY="112.0" prefHeight="18.0" prefWidth="254.0" />
                   <Label fx:id="lblPasswordError" layoutX="91.0" layoutY="166.0" prefHeight="18.0" prefWidth="254.0" />
                   <Label fx:id="lblRepeatPasswordError" layoutX="148.0" layoutY="220.0" prefHeight="18.0" prefWidth="254.0" />

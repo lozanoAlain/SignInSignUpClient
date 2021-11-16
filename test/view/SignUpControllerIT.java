@@ -5,6 +5,8 @@
  */
 package view;
 
+import clientApplication.ClientApplication;
+import java.util.concurrent.TimeoutException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
@@ -12,10 +14,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.runners.MethodSorters;
 import static org.testfx.api.FxAssert.verifyThat;
+import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 import static org.testfx.matcher.base.NodeMatchers.isDisabled;
 import static org.testfx.matcher.base.NodeMatchers.isEnabled;
@@ -51,14 +56,15 @@ public class SignUpControllerIT extends ApplicationTest {
             + "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             + "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 
-    /*
+    
     @BeforeClass
     public static void setUpClass() throws TimeoutException {
         FxToolkit.registerPrimaryStage();
         FxToolkit.setupApplication(ClientApplication.class);
 
     }
-     */
+     
+    /*
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("SignUpWindow.fxml"));
@@ -74,13 +80,13 @@ public class SignUpControllerIT extends ApplicationTest {
         signUpController.initStage(root);
         
     }
-
+*/
     @Before
     public void initializeLookUp() {
         txtFullName = lookup("#txtFullName").query();
-        txtUsername = lookup("#txtUsername").query();
+        txtUsername = lookup("#txtUsernameUp").query();
         txtMail = lookup("#txtMail").query();
-        txtPassword = lookup("#txtPassword").query();
+        txtPassword = lookup("#txtPasswordUp").query();
         txtRepeatPassword = lookup("#txtRepeatPassword").query();
 
         lblFullNameError = lookup("#lblFullNameError").query();
@@ -97,6 +103,7 @@ public class SignUpControllerIT extends ApplicationTest {
     @Test
     public void testA_InitialState() {
 
+        clickOn("#hlkHere");
         verifyThat("#txtFullName", isEnabled());
         verifyThat("#txtUsername", isEnabled());
         verifyThat("#txtPassword", isEnabled());
@@ -181,6 +188,7 @@ public class SignUpControllerIT extends ApplicationTest {
         verifyThat(lbl, hasText("The field is too long (255 character max)."));
         doubleClickOn(txt);
         eraseText(1);
+        lbl.setVisible(false);
 
     }
 

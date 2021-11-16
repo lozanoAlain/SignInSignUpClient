@@ -81,11 +81,11 @@ public class SignUpController {
     @FXML
     private PasswordField txtRepeatPassword;
     @FXML
-    private TextField txtUsername;
+    private TextField txtUsernameUp;
     @FXML
     private TextField txtMail;
     @FXML
-    private PasswordField txtPassword;
+    private PasswordField txtPasswordUp;
     @FXML
     private Button btnRegister;
     @FXML
@@ -102,7 +102,7 @@ public class SignUpController {
     private SignInWindowController signin;
 
     /*
-    The fields Full name (txtFullName), Username (txtUsername), Mail (txtMail), Password (txtPassword) and Repeat password (txtRepeatPassword) are enabled.
+    The fields Full name (txtFullName), Username (txtUsernameUp), Mail (txtMail), Password (txtPasswordUp) and Repeat password (txtRepeatPassword) are enabled.
 
     The Back (btnBack) and Register (btnRegister) buttons are enabled.
 
@@ -122,9 +122,9 @@ public class SignUpController {
 
         stage.setOnShowing(this::handleWindowShowing);
         txtFullName.textProperty().addListener(this::fullNameTextChanged);
-        txtUsername.textProperty().addListener(this::usernameTextChanged);
+        txtUsernameUp.textProperty().addListener(this::usernameTextChanged);
         txtMail.textProperty().addListener(this::mailTextChanged);
-        txtPassword.textProperty().addListener(this::passwordTextChanged);
+        txtPasswordUp.textProperty().addListener(this::passwordTextChanged);
         txtRepeatPassword.textProperty().addListener(this::repeatPasswordTextChanged);
         btnBack.setOnAction(this::handleButtonBack);
         btnRegister.setOnAction(this::handleButtonRegister);
@@ -193,7 +193,7 @@ public class SignUpController {
      * @param newValue The new value of the text field
      */
     /*
-    Check that the Username field (txtUsername) is no longer than 255 characters (checkNoLonger255()).
+    Check that the Username field (txtUsernameUp) is no longer than 255 characters (checkNoLonger255()).
     If it is not correct (FieldTooLongException()), an error label (lblUsernameError) is shown and the register button(btnRegister is disabled.
     When the error is corrected the register button(btnRegister) is enabled.
      */
@@ -208,7 +208,7 @@ public class SignUpController {
 
         try {
             if (!newValue.equalsIgnoreCase(oldValue)) {
-                check255(txtUsername.getText(), lblUsernameError);
+                check255(txtUsernameUp.getText(), lblUsernameError);
             }
         } catch (FieldTooLongException ex) {
             errorLabel(lblUsernameError, ex);
@@ -240,7 +240,7 @@ public class SignUpController {
     }
 
     /*
-    Check that the Password field (txtPassword) is no longer than 255 characters (checkNoLonger255()).
+    Check that the Password field (txtPasswordUp) is no longer than 255 characters (checkNoLonger255()).
     If it is not correct (FieldTooLongException()), an error label (lblPasswordError) is shown and the register button(btnRegister is disabled.
     When the error is corrected the register button(btnRegister) is enabled.
      */
@@ -255,7 +255,7 @@ public class SignUpController {
 
         try {
             if (!newValue.equalsIgnoreCase(oldValue)) {
-                check255(new String(txtPassword.getText()), lblPasswordError);
+                check255(new String(txtPasswordUp.getText()), lblPasswordError);
             }
         } catch (FieldTooLongException ex) {
             errorLabel(lblPasswordError, ex);
@@ -338,7 +338,7 @@ public class SignUpController {
     }
 
     /*
-    Validate that there is not already a user with the same value in the Username field (txtUsername), sending the User to the database through the signIn() method.
+    Validate that there is not already a user with the same value in the Username field (txtUsernameUp), sending the User to the database through the signIn() method.
     If it exists (ExistUserException()), an alert (alertExistUser) is displayed and when it is closed, all the fields are deleted.
     If it does not exist, a user is added to the database through the signUp() method, with the data entered and the signIn window is open sending the username and the password.
      */
@@ -351,7 +351,7 @@ public class SignUpController {
 
         try {
             /*
-                Check that the Full Name field (txtFullName), Username field (txtUsername), Mail field (txtMail), Password field (txtPassword) and Repeat Password field (txtRepeatPassword) fields are not empty.
+                Check that the Full Name field (txtFullName), Username field (txtUsernameUp), Mail field (txtMail), Password field (txtPasswordUp) and Repeat Password field (txtRepeatPassword) fields are not empty.
                 If they are empty (EmptyFieldException()), an error label is shown for each field (lblFullNameError, lblUsernameError, lblMailError, lblPasswordError, lblRepeatPasswordError).
              */
             try {
@@ -364,8 +364,8 @@ public class SignUpController {
                 throw new EmptyFieldsException();
             }
             try {
-                if (txtUsername.getText().trim().isEmpty()) {
-                    txtUsername.requestFocus();
+                if (txtUsernameUp.getText().trim().isEmpty()) {
+                    txtUsernameUp.requestFocus();
                     throw new EmptyFieldsException();
                 }
             } catch (EmptyFieldsException ex) {
@@ -382,8 +382,8 @@ public class SignUpController {
                 throw new EmptyFieldsException();
             }
             try {
-                if (txtPassword.getText().trim().isEmpty()) {
-                    txtPassword.requestFocus();
+                if (txtPasswordUp.getText().trim().isEmpty()) {
+                    txtPasswordUp.requestFocus();
                     throw new EmptyFieldsException();
                 }
             } catch (EmptyFieldsException ex) {
@@ -424,7 +424,7 @@ public class SignUpController {
         } catch (RepeatPasswordException ex) {
             errorLabel(lblPasswordError, ex);
             errorLabel(lblRepeatPasswordError, ex);
-            txtPassword.requestFocus();
+            txtPasswordUp.requestFocus();
         } catch (ExistUserException | ConnectionErrorException ex) {
             alertExceptionMethod(ex);
         } catch (Exception ex) {
@@ -485,7 +485,7 @@ public class SignUpController {
 
 
     /*
-    Validate that the password entered in the Repeat Password field (txtRepeatPassword) is the same as the one entered in the Password field (txtPassword).
+    Validate that the password entered in the Repeat Password field (txtRepeatPassword) is the same as the one entered in the Password field (txtPasswordUp).
     If it is not the same (RepeatPasswordException()), an error label (lblRepeatPasswordError) is shown.
      */
     /**
@@ -495,7 +495,7 @@ public class SignUpController {
      * match
      */
     private void checkPasswords() throws RepeatPasswordException {
-        if (!new String(txtPassword.getText()).trim().equals(new String(txtRepeatPassword.getText()).trim())) {
+        if (!new String(txtPasswordUp.getText()).trim().equals(new String(txtRepeatPassword.getText()).trim())) {
             throw new RepeatPasswordException();
         }
     }
@@ -509,9 +509,9 @@ public class SignUpController {
 
         User user = new User();
         user.setFullName(txtFullName.getText());
-        user.setLogin(txtUsername.getText());
+        user.setLogin(txtUsernameUp.getText());
         user.setEmail(txtMail.getText());
-        user.setPassword(new String(txtPassword.getText()));
+        user.setPassword(new String(txtPasswordUp.getText()));
         return user;
     }
 

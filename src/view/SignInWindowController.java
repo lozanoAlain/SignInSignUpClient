@@ -275,10 +275,10 @@ public class SignInWindowController {
 
             //Opening application as modal
             stageSignUp.initModality(Modality.APPLICATION_MODAL);
-           /*
+           
             stageSignUp.initOwner(
                     ((Node) event.getSource()).getScene().getWindow());
-*/
+
             Logger.getLogger(SignInWindowController.class.getName()).log(Level.INFO, "Initializing stage.");
             signUpController.initStage(root);
 
