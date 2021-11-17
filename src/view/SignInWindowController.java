@@ -231,7 +231,7 @@ public class SignInWindowController {
     }
 
     /**
-     * Handels the login button, checks the username and password and shows
+     * Handles the login button, checks the username and password and shows
      * multiple errors if doesnt match the cryteria. If the User exists, the
      * Welcome window (WelcomeWindow) is opened as modal. And the Sign In window
      * (SignInWindow) is closed.
