@@ -89,11 +89,11 @@ public class SignUpController {
     @FXML
     private Button btnRegister;
     @FXML
-    private Label lblUsernameError;
+    private Label lblUsernameErrorUp;
     @FXML
     private Label lblMailError;
     @FXML
-    private Label lblPasswordError;
+    private Label lblPasswordErrorUp;
     /*@FXML
     private Label lblPassword2Error;*/
     @FXML
@@ -151,9 +151,9 @@ public class SignUpController {
 
         lblFullNameError.setVisible(false);
         lblMailError.setVisible(false);
-        lblPasswordError.setVisible(false);
+        lblPasswordErrorUp.setVisible(false);
         lblRepeatPasswordError.setVisible(false);
-        lblUsernameError.setVisible(false);
+        lblUsernameErrorUp.setVisible(false);
 
     }
 
@@ -208,10 +208,10 @@ public class SignUpController {
 
         try {
             if (!newValue.equalsIgnoreCase(oldValue)) {
-                check255(txtUsernameUp.getText(), lblUsernameError);
+                check255(txtUsernameUp.getText(), lblUsernameErrorUp);
             }
         } catch (FieldTooLongException ex) {
-            errorLabel(lblUsernameError, ex);
+            errorLabel(lblUsernameErrorUp, ex);
         }
     }
 
@@ -255,10 +255,10 @@ public class SignUpController {
 
         try {
             if (!newValue.equalsIgnoreCase(oldValue)) {
-                check255(new String(txtPasswordUp.getText()), lblPasswordError);
+                check255(new String(txtPasswordUp.getText()), lblPasswordErrorUp);
             }
         } catch (FieldTooLongException ex) {
-            errorLabel(lblPasswordError, ex);
+            errorLabel(lblPasswordErrorUp, ex);
 
         }
     }
@@ -327,17 +327,16 @@ public class SignUpController {
      * @throws FullNameException The exception if the text does not have at
      * least one blank
      */
+    /*
     private void checkWhiteSpace(String text, Label lblError) throws FullNameException {
         if (!text.trim().contains(" ")) {
-            btnRegister.setDisable(true);
             throw new FullNameException();
-        } else {
-            btnRegister.setDisable(false);
         }
 
     }
+     */
 
-    /*
+ /*
     Validate that there is not already a user with the same value in the Username field (txtUsernameUp), sending the User to the database through the signIn() method.
     If it exists (ExistUserException()), an alert (alertExistUser) is displayed and when it is closed, all the fields are deleted.
     If it does not exist, a user is added to the database through the signUp() method, with the data entered and the signIn window is open sending the username and the password.
@@ -358,6 +357,10 @@ public class SignUpController {
                 if (txtFullName.getText().trim().isEmpty()) {
                     txtFullName.requestFocus();
                     throw new EmptyFieldsException();
+                } else {
+                    if (!txtFullName.getText().trim().contains(" ")) {
+                        throw new FullNameException();
+                    }
                 }
             } catch (EmptyFieldsException ex) {
                 errorLabel(lblFullNameError, ex);
@@ -369,7 +372,7 @@ public class SignUpController {
                     throw new EmptyFieldsException();
                 }
             } catch (EmptyFieldsException ex) {
-                errorLabel(lblUsernameError, ex);
+                errorLabel(lblUsernameErrorUp, ex);
                 throw new EmptyFieldsException();
             }
             try {
@@ -387,7 +390,7 @@ public class SignUpController {
                     throw new EmptyFieldsException();
                 }
             } catch (EmptyFieldsException ex) {
-                errorLabel(lblPasswordError, ex);
+                errorLabel(lblPasswordErrorUp, ex);
                 throw new EmptyFieldsException();
             }
             try {
@@ -401,7 +404,7 @@ public class SignUpController {
             }
 
             //Check that the full name has at least 1 blank
-            checkWhiteSpace(txtFullName.getText(), lblFullNameError);
+            //checkWhiteSpace(txtFullName.getText(), lblFullNameError);
             //Check that the two passwords match
             checkPasswords();
 
@@ -422,7 +425,7 @@ public class SignUpController {
             errorLabel(lblFullNameError, ex);
             txtFullName.requestFocus();
         } catch (RepeatPasswordException ex) {
-            errorLabel(lblPasswordError, ex);
+            errorLabel(lblPasswordErrorUp, ex);
             errorLabel(lblRepeatPasswordError, ex);
             txtPasswordUp.requestFocus();
         } catch (ExistUserException | ConnectionErrorException ex) {
@@ -475,7 +478,7 @@ public class SignUpController {
             SignInWindowController controller = (SignInWindowController) loader.getController();
             controller.setStage(stage);
             controller.initStage(root);
-            */
+             */
 
         } catch (Exception ex) {
             lblFullNameError.setText(ex.getMessage());

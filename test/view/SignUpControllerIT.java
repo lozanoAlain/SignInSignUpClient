@@ -25,6 +25,7 @@ import org.testfx.framework.junit.ApplicationTest;
 import static org.testfx.matcher.base.NodeMatchers.isDisabled;
 import static org.testfx.matcher.base.NodeMatchers.isEnabled;
 import static org.testfx.matcher.base.NodeMatchers.isFocused;
+import static org.testfx.matcher.base.NodeMatchers.isInvisible;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
 import static org.testfx.matcher.control.LabeledMatchers.hasText;
 
@@ -90,16 +91,16 @@ public class SignUpControllerIT extends ApplicationTest {
         txtRepeatPassword = lookup("#txtRepeatPassword").query();
 
         lblFullNameError = lookup("#lblFullNameError").query();
-        lblUsernameError = lookup("#lblUsernameError").query();
+        lblUsernameError = lookup("#lblUsernameErrorUp").query();
         lblMailError = lookup("#lblMailError").query();
-        lblPasswordError = lookup("#lblPasswordError").query();
+        lblPasswordError = lookup("#lblPasswordErrorUp").query();
         lblRepeatPasswordError = lookup("#lblRepeatPasswordError").query();
 
     }
 
     public SignUpControllerIT() {
     }
-
+    
     @Test
     public void testA_InitialState() {
 
@@ -181,6 +182,7 @@ public class SignUpControllerIT extends ApplicationTest {
     }
 
     private void textLongerThan255(TextField txt, Label lbl) {
+        
         clickOn(txt);
         write(OVERSIZED_TEXT);
         verifyThat("#btnRegister", isDisabled());
@@ -194,6 +196,7 @@ public class SignUpControllerIT extends ApplicationTest {
 
     @Test
     public void testF_BlankSpacesError() {
+        press(KeyCode.ENTER).release(KeyCode.ENTER);
         cleanAll();
         clickOn(txtFullName);
         write("AAA");
@@ -207,44 +210,51 @@ public class SignUpControllerIT extends ApplicationTest {
         eraseText(1);
         write("AA A");
         clickOn("#btnRegister");
-        verifyThat(lblFullNameError, hasText(""));
+        verifyThat(lblFullNameError, isInvisible());
 
     }
 
     @Test
     public void testH_FullNameEmptyField() {
-        doubleClickOn(txtFullName);
-        eraseText(1);
+        clean(txtFullName);
         clickOn("#btnRegister");
         verifyThat(lblFullNameError, hasText("The field cannot be empty."));
         write("AA A");  
 
     }
-    
+   
     @Test
     public void testI_UserNameEmptyField(){
         clickOn("#btnRegister");
-        verifyThat(lblUsernameError, hasText("The field cannot be empty."));
+        verifyThat(lblFullNameError, isInvisible());
+        verifyThat(lblUsernameError, isVisible());
+        //verifyThat(lblUsernameError, hasText("The field cannot be empty."));
         write("AA");
     }
     
     @Test
     public void testJ_MailEmptyField(){
         clickOn("#btnRegister");
+        verifyThat(lblUsernameError, isInvisible());
+        verifyThat(lblMailError, isVisible());
         verifyThat(lblMailError, hasText("The field cannot be empty."));
         write("AA");
     }
-    
+   
     @Test
     public void testK_UsPasswordEmptyField(){
         clickOn("#btnRegister");
+        verifyThat(lblMailError, isInvisible());
+        verifyThat(lblPasswordError, isVisible());
         verifyThat(lblPasswordError, hasText("The field cannot be empty."));
         write("AA");
     }
-    
+   
     @Test
     public void testM_RepeatPasswordEmptyField(){
         clickOn("#btnRegister");
+        verifyThat(lblPasswordError, isInvisible());
+        verifyThat(lblRepeatPasswordError, isVisible());
         verifyThat(lblRepeatPasswordError, hasText("The field cannot be empty."));
         write("AA");
     }
