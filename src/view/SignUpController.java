@@ -417,7 +417,7 @@ public class SignUpController {
             alertUserAddedCorrectly.showAndWait();
 
             getStage().close();
-            openSignInWindow(user);
+            //openSignInWindow(user);
 
         } catch (EmptyFieldsException ex) {
             logger.severe(ex.getMessage());
