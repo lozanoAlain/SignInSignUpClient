@@ -86,7 +86,7 @@ public class WelcomeWindowController {
         btnLogOut.setTooltip(new Tooltip("Click to log out (You will be redirected to log in window)"));
 
         //A text (txtWelcome) with the user's name is displayed.
-        txtWelcome.setText("Hello " + user.getLogin());
+        txtWelcome.setText("Hello " + user.getFullName());
 
         //Shows stage
         stage.show();

@@ -122,6 +122,7 @@ public class SignInWindowTest extends ApplicationTest {
         write("abcd*1234");
         clickOn("#btnLogin");
         verifyThat(window("Welcome window"), WindowMatchers.isShowing());
+        verifyThat("Hello Matteo Fernandez Inigo", isVisible());
         clickOn("#btnLogOut");
         clickOn("Aceptar");
     }
@@ -156,9 +157,9 @@ public class SignInWindowTest extends ApplicationTest {
 
     /**
      * Test what happens when the server is off and the conexion doesnt work
-     * 
+     *
      */
-    //TEST ONLY WITHPUT THE SERVER RUNNING
+    //TEST ONLY WITHOUT THE SERVER RUNNING
     @Test
     public void testD_Connection_Error() {
         doubleClickOn("#txtUsername");

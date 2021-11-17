@@ -13,63 +13,68 @@
 <?import javafx.scene.text.Font?>
 
 <VBox id="signIn" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.SignInWindowController">
-  <children>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="396.0" prefWidth="640.0" VBox.vgrow="ALWAYS">
-      <children>
-            <AnchorPane id="anchorPane" layoutX="251.0" layoutY="324.0" opacity="0.8" prefHeight="53.0" prefWidth="359.0" stylesheets="@css.css" />
-            <AnchorPane id="anchorPane" layoutX="251.0" layoutY="128.0" opacity="0.8" prefHeight="165.0" prefWidth="368.0" stylesheets="@css.css">
-               <children>
-                  <Button fx:id="btnLogin" defaultButton="true" layoutX="290.0" layoutY="129.0" mnemonicParsing="false" onAction="#handleBtnLoginPressed" prefHeight="25.0" prefWidth="64.0" text="Login" textFill="#53635c">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Button>
-                  <Label fx:id="lblUsernameError" layoutX="109.0" layoutY="14.0" prefHeight="25.0" prefWidth="224.0" textFill="RED">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="lblPasswordError" layoutX="98.0" layoutY="73.0" prefHeight="25.0" prefWidth="224.0" textFill="RED">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="17.0" layoutY="72.0" prefHeight="25.0" prefWidth="106.0" text="Password:" textFill="#53635c">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <PasswordField fx:id="txtPassword" layoutX="17.0" layoutY="99.0" prefHeight="25.0" prefWidth="154.0" promptText="Insert your password" />
-                  <Label layoutX="17.0" layoutY="5.0" prefHeight="38.0" prefWidth="106.0" text="Username:" textFill="#53635c">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="txtUsername" layoutX="17.0" layoutY="39.0" prefHeight="27.0" prefWidth="154.0" promptText="Insert your username" />
-               </children>
-            </AnchorPane>
-            <ImageView id="imgCerebro" fitHeight="425.0" fitWidth="191.0" layoutY="-3.0" pickOnBounds="true" preserveRatio="true" smooth="false">
-               <image>
-                  <Image url="@cerebro.jpg" />
-               </image>
-            </ImageView>
-            <Label layoutX="327.0" layoutY="14.0" prefHeight="60.0" prefWidth="239.0" stylesheets="@css.css" text="Sign In" textFill="#93ab9b">
-               <font>
-                  <Font size="53.0" />
-               </font>
-            </Label>
-             <Label layoutX="267.0" layoutY="331.0" prefHeight="38.0" prefWidth="338.0" stylesheets="@css.css" text="If you don´t have an account register" textFill="#53635c">
-               <font>
-                  <Font size="17.0" />
-               </font>
-            </Label>
-            <Hyperlink fx:id="hlkHere" layoutX="541.0" layoutY="333.0" onAction="#hlkHerePressed" text="here." textFill="#253ba8" visited="true">
-               <font>
-                  <Font size="17.0" />
-               </font>
-            </Hyperlink>
-      </children>
-    </AnchorPane>
-      <AnchorPane id="anchorPane" opacity="0.8" prefHeight="174.0" prefWidth="359.0" stylesheets="@css.css" />
-  </children>
+    <children>
+        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="396.0" prefWidth="640.0" VBox.vgrow="ALWAYS">
+            <children>
+                <AnchorPane id="anchorPane" layoutX="251.0" layoutY="324.0" opacity="0.8" prefHeight="53.0" prefWidth="359.0" stylesheets="@css.css">
+                    <children>
+                        <Hyperlink fx:id="hlkHere" layoutX="295.0" layoutY="10.0" onAction="#hlkHerePressed" prefHeight="34.0" prefWidth="64.0" text="here." textFill="#253ba8" visited="true">
+                            <font>
+                                <Font size="17.0" />
+                            </font>
+                        </Hyperlink>
+                    </children>
+                </AnchorPane>
+                <AnchorPane id="anchorPane" layoutX="251.0" layoutY="128.0" opacity="0.8" prefHeight="165.0" prefWidth="368.0" stylesheets="@css.css">
+                    <children>
+               
+                        <Label fx:id="lblUsernameError" layoutX="109.0" layoutY="14.0" prefHeight="25.0" prefWidth="224.0" textFill="RED">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="lblPasswordError" layoutX="98.0" layoutY="73.0" prefHeight="25.0" prefWidth="224.0" textFill="RED">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="txtUsername" layoutX="17.0" layoutY="39.0" prefHeight="27.0" prefWidth="154.0" promptText="Insert your username" />
+           
+                        <PasswordField fx:id="txtPassword" layoutX="17.0" layoutY="99.0" prefHeight="25.0" prefWidth="154.0" promptText="Insert your password" />
+                        <Label layoutX="17.0" layoutY="5.0" prefHeight="38.0" prefWidth="106.0" text="Username:" textFill="#53635c">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="17.0" layoutY="72.0" prefHeight="25.0" prefWidth="106.0" text="Password:" textFill="#53635c">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Label>
+                        <Button fx:id="btnLogin" defaultButton="true" layoutX="290.0" layoutY="129.0" mnemonicParsing="false" onAction="#handleBtnLoginPressed" prefHeight="25.0" prefWidth="64.0" text="Login" textFill="#53635c">
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor>
+                        </Button>
+                    </children>
+                </AnchorPane>
+                <ImageView id="imgCerebro" fitHeight="425.0" fitWidth="191.0" layoutY="-3.0" pickOnBounds="true" preserveRatio="true" smooth="false">
+                    <image>
+                        <Image url="@cerebro.jpg" />
+                    </image>
+                </ImageView>
+                <Label layoutX="327.0" layoutY="14.0" prefHeight="60.0" prefWidth="239.0" stylesheets="@css.css" text="Sign In" textFill="#93ab9b">
+                    <font>
+                        <Font size="53.0" />
+                    </font>
+                </Label>
+                <Label layoutX="267.0" layoutY="331.0" prefHeight="38.0" prefWidth="280.0" stylesheets="@css.css" text="If you don´t have an account register" textFill="#53635c">
+                    <font>
+                        <Font size="17.0" />
+                    </font>
+                </Label>
+            </children>
+        </AnchorPane>
+        <AnchorPane id="anchorPane" opacity="0.8" prefHeight="174.0" prefWidth="359.0" stylesheets="@css.css" />
+    </children>
 </VBox>

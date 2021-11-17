@@ -46,6 +46,7 @@ public class SignUpController {
 //Getters and Setters
     /**
      * Gets the stage
+     *
      * @return the stage
      */
     public Stage getStage() {
@@ -54,6 +55,7 @@ public class SignUpController {
 
     /**
      * Sets the stage
+     *
      * @param stage the stage to set
      */
     public void setStage(Stage stage) {
@@ -436,13 +438,7 @@ public class SignUpController {
     private void handleButtonBack(ActionEvent event) {
         try {
             getStage().close();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignInWindow.fxml"));
-            Parent root = (Parent) loader.load();
-
-            SignInWindowController controller = (SignInWindowController) loader.getController();
-            controller.setStage(stage);
-            controller.initStage(root);
-
+            
         } catch (Exception ex) {
             lblFullNameError.setText(ex.getMessage());
             logger.severe(ex.getMessage());
