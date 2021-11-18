@@ -122,7 +122,6 @@ public class SignInWindowTest extends ApplicationTest {
         write("abcd*1234");
         clickOn("#btnLogin");
         verifyThat(window("Welcome window"), WindowMatchers.isShowing());
-        verifyThat("Hello Matteo Fernandez Inigo", isVisible());
         clickOn("#btnLogOut");
         clickOn("Aceptar");
     }
