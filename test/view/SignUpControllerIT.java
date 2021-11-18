@@ -37,9 +37,9 @@ import static org.testfx.matcher.control.LabeledMatchers.hasText;
 public class SignUpControllerIT extends ApplicationTest {
 
     private TextField txtFullName;
-    private TextField txtUsername;
+    private TextField txtUsernameUp;
     private TextField txtMail;
-    private TextField txtPassword;
+    private TextField txtPasswordUp;
     private TextField txtRepeatPassword;
 
     private Label lblFullNameError;
@@ -85,9 +85,9 @@ public class SignUpControllerIT extends ApplicationTest {
     @Before
     public void initializeLookUp() {
         txtFullName = lookup("#txtFullName").query();
-        txtUsername = lookup("#txtUsernameUp").query();
+        txtUsernameUp = lookup("#txtUsernameUp").query();
         txtMail = lookup("#txtMail").query();
-        txtPassword = lookup("#txtPasswordUp").query();
+        txtPasswordUp = lookup("#txtPasswordUp").query();
         txtRepeatPassword = lookup("#txtRepeatPassword").query();
 
         lblFullNameError = lookup("#lblFullNameError").query();
@@ -119,32 +119,33 @@ public class SignUpControllerIT extends ApplicationTest {
     public void testB_SignUpCorrect() {
         clickOn(txtFullName);
         write("Aitor Ruiz De Gauna");
-        clickOn(txtUsername);
+        clickOn(txtUsernameUp);
         write("aitor");
         clickOn(txtMail);
         write("aitor@gmail.com");
-        clickOn(txtPassword);
+        clickOn(txtPasswordUp);
         write("abcd*1234");
         clickOn(txtRepeatPassword);
         write("abcd*1234");
         clickOn("#btnRegister");
         verifyThat("User added correctly", isVisible());
+        sleep(1000);
 
     }
-
+@Ignore
     @Test
     public void testC_SignUpErrorServer() {
         press(KeyCode.ENTER).release(KeyCode.ENTER);
         cleanAll();
-        clickOn(txtFullName);
+        clickOn("#txtFullName");
         write("Aitor Ruiz De Gauna");
-        clickOn(txtUsername);
+        clickOn("#txtUsernameUp");
         write("aitor");
-        clickOn(txtMail);
+        clickOn("#txtMail");
         write("aitor@gmail.com");
-        clickOn(txtPassword);
+        clickOn("#txtPasswordUp");
         write("abcd*1234");
-        clickOn(txtRepeatPassword);
+        clickOn("#txtRepeatPassword");
         write("abcd*1234");
         clickOn("#btnRegister");
         verifyThat("It was implossible to connect to the server.", isVisible());
@@ -154,30 +155,32 @@ public class SignUpControllerIT extends ApplicationTest {
     @Test
     public void testD_SignUpErrorUser() {
         press(KeyCode.ENTER).release(KeyCode.ENTER);
-        cleanAll();
-        clickOn(txtFullName);
+        clickOn("#hlkHere");
+        //cleanAll();
+        clickOn("#txtFullName");
         write("Alain Lozano");
-        clickOn(txtUsername);
+        clickOn("#txtUsernameUp");
         write("alain");
-        clickOn(txtMail);
+        clickOn("#txtMail");
         write("alain@gmail.com");
-        clickOn(txtPassword);
+        clickOn("#txtPasswordUp");
         write("abcd*1234");
-        clickOn(txtRepeatPassword);
+        clickOn("#txtRepeatPassword");
         write("abcd*1234");
         clickOn("#btnRegister");
         verifyThat("The user already exist.", isVisible());
+        sleep(1000);
 
     }
-
+@Ignore
     @Test
     public void testE_TextLongerThan255() {
         press(KeyCode.ENTER).release(KeyCode.ENTER);
         cleanAll();
         textLongerThan255(txtFullName, lblFullNameError);
-        textLongerThan255(txtUsername, lblUsernameError);
+        textLongerThan255(txtUsernameUp, lblUsernameError);
         textLongerThan255(txtMail, lblMailError);
-        textLongerThan255(txtPassword, lblPasswordError);
+        textLongerThan255(txtPasswordUp, lblPasswordError);
         textLongerThan255(txtRepeatPassword, lblRepeatPasswordError);
     }
 
@@ -193,7 +196,7 @@ public class SignUpControllerIT extends ApplicationTest {
         lbl.setVisible(false);
 
     }
-
+@Ignore
     @Test
     public void testF_BlankSpacesError() {
         press(KeyCode.ENTER).release(KeyCode.ENTER);
@@ -203,7 +206,7 @@ public class SignUpControllerIT extends ApplicationTest {
         clickOn("#btnRegister");
         verifyThat(lblFullNameError, hasText("The full name is incomplete."));
     }
-
+@Ignore
     @Test
     public void testG_BlankSpacesCorrect() {
         doubleClickOn(txtFullName);
@@ -213,7 +216,7 @@ public class SignUpControllerIT extends ApplicationTest {
         verifyThat(lblFullNameError, isInvisible());
 
     }
-
+@Ignore
     @Test
     public void testH_FullNameEmptyField() {
         clean(txtFullName);
@@ -222,7 +225,7 @@ public class SignUpControllerIT extends ApplicationTest {
         write("AA A");  
 
     }
-   
+   @Ignore
     @Test
     public void testI_UserNameEmptyField(){
         clickOn("#btnRegister");
@@ -231,7 +234,7 @@ public class SignUpControllerIT extends ApplicationTest {
         //verifyThat(lblUsernameError, hasText("The field cannot be empty."));
         write("AA");
     }
-    
+    @Ignore
     @Test
     public void testJ_MailEmptyField(){
         clickOn("#btnRegister");
@@ -240,7 +243,7 @@ public class SignUpControllerIT extends ApplicationTest {
         verifyThat(lblMailError, hasText("The field cannot be empty."));
         write("AA");
     }
-   
+   @Ignore
     @Test
     public void testK_UsPasswordEmptyField(){
         clickOn("#btnRegister");
@@ -249,7 +252,7 @@ public class SignUpControllerIT extends ApplicationTest {
         verifyThat(lblPasswordError, hasText("The field cannot be empty."));
         write("AA");
     }
-   
+   @Ignore
     @Test
     public void testM_RepeatPasswordEmptyField(){
         clickOn("#btnRegister");
@@ -258,7 +261,7 @@ public class SignUpControllerIT extends ApplicationTest {
         verifyThat(lblRepeatPasswordError, hasText("The field cannot be empty."));
         write("AA");
     }
-
+@Ignore
     @Test
     public void testN_PasswordCorrect() {
         doubleClickOn(txtRepeatPassword);
@@ -267,7 +270,7 @@ public class SignUpControllerIT extends ApplicationTest {
         clickOn("#btnRegister");
         verifyThat(lblPasswordError, hasText("The passwords don´t match."));
         verifyThat(lblRepeatPasswordError, hasText("The passwords don´t match."));
-        verifyThat(txtPassword, isFocused());
+        verifyThat(txtPasswordUp, isFocused());
 
     }
 
@@ -281,9 +284,9 @@ public class SignUpControllerIT extends ApplicationTest {
         //Delete data
 
         clean(txtFullName);
-        clean(txtUsername);
+        clean(txtUsernameUp);
         clean(txtMail);
-        clean(txtPassword);
+        clean(txtPasswordUp);
         clean(txtRepeatPassword);
 
     }

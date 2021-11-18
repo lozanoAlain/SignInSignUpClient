@@ -411,6 +411,7 @@ public class SignUpController {
             //If there are any exceptions the user is added
             User user = addUser();
             signable.signUp(user);
+            lblPasswordErrorUp.setVisible(false);
             Alert alertUserAddedCorrectly = new Alert(AlertType.INFORMATION);
             alertUserAddedCorrectly.setTitle("SIGN UP");
             alertUserAddedCorrectly.setHeaderText("User added correctly");
