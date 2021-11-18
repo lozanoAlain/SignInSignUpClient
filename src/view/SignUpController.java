@@ -377,7 +377,7 @@ public class SignUpController {
                 alertUserAddedCorrectly.showAndWait();
 
                 getStage().close();
-                openSignInWindow(user);
+                //openSignInWindow(user);
 
             }catch(MailErrorException ex){
                 errorLabel(lblMailError, ex);

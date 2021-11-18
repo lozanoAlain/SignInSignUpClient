@@ -5,6 +5,8 @@
  */
 package view;
 
+import clientApplication.ClientApplication;
+import java.util.concurrent.TimeoutException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
@@ -12,11 +14,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.runners.MethodSorters;
 import static org.testfx.api.FxAssert.verifyThat;
+import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 import static org.testfx.matcher.base.NodeMatchers.isDisabled;
 import static org.testfx.matcher.base.NodeMatchers.isEnabled;
@@ -52,14 +56,14 @@ public class SignUpControllerIT extends ApplicationTest {
             + "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             + "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 
-    /*
+    
     @BeforeClass
     public static void setUpClass() throws TimeoutException {
         FxToolkit.registerPrimaryStage();
         FxToolkit.setupApplication(ClientApplication.class);
 
     }
-     */
+     
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("SignUpWindow.fxml"));
@@ -120,14 +124,12 @@ public class SignUpControllerIT extends ApplicationTest {
         clickOn(txtRepeatPassword);
         write("abcd*1234");
         clickOn("#btnRegister");
-        verifyThat("User added correctly", isVisible());
-
+        verifyThat("User added correctly", isVisible());     
     }
 
     @Test
     public void testC_SignUpErrorServer() {
-        press(KeyCode.ENTER).release(KeyCode.ENTER);
-        cleanAll();
+        press(KeyCode.ENTER).release(KeyCode.ENTER); 
         clickOn(txtFullName);
         write("Aitor Ruiz De Gauna");
         clickOn(txtUsername);
@@ -161,7 +163,7 @@ public class SignUpControllerIT extends ApplicationTest {
         verifyThat("The user already exist.", isVisible());
 
     }
-
+    @Ignore
     @Test
     public void testE_TextLongerThan255() {
         press(KeyCode.ENTER).release(KeyCode.ENTER);
@@ -183,7 +185,8 @@ public class SignUpControllerIT extends ApplicationTest {
         eraseText(1);
 
     }
-
+    
+    @Ignore
     @Test
     public void testF_BlankSpacesError() {
         press(KeyCode.ENTER).release(KeyCode.ENTER);
@@ -194,7 +197,8 @@ public class SignUpControllerIT extends ApplicationTest {
         verifyThat("#btnRegister", isDisabled());
         verifyThat(lblFullNameError, hasText("The full name is incomplete."));
     }
-
+    
+    @Ignore
     @Test
     public void testG_BlankSpacesCorrect() {
         doubleClickOn(txtFullName);
@@ -205,7 +209,8 @@ public class SignUpControllerIT extends ApplicationTest {
         verifyThat(lblFullNameError, hasText(""));
 
     }
-
+    
+    @Ignore
     @Test
     public void testH_EmptyField() {
         clickOn(txtFullName);
@@ -217,7 +222,8 @@ public class SignUpControllerIT extends ApplicationTest {
         verifyThat(lblRepeatPasswordError, hasText("The field cannot be empty."));
 
     }
-
+    
+    @Ignore
     @Test
     public void testI_PasswordCorrect() {
         clickOn(txtFullName);
@@ -236,7 +242,8 @@ public class SignUpControllerIT extends ApplicationTest {
         verifyThat(txtPassword, isFocused());
 
     }
-
+    
+    @Ignore
     @Test
     public void testJ_EmailCorrect() {
         cleanAll();
